@@ -1,0 +1,93 @@
+
+import React from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+
+interface HeroProps {
+  onHoverStart: () => void;
+  onHoverEnd: () => void;
+}
+
+const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
+  const { scrollY } = useScroll();
+  const y1 = useTransform(scrollY, [0, 500], [0, 200]);
+  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+
+  return (
+    <section id="mill" className="relative h-screen w-full overflow-hidden flex flex-col justify-center">
+      {/* Background Parallax Layer */}
+      <motion.div 
+        style={{ y: y1 }}
+        className="absolute inset-0 z-0"
+      >
+        {/* The Scrim Gradient - Exact Creative Direction Spec */}
+        <div 
+            className="absolute inset-0 z-10" 
+            style={{
+                background: 'linear-gradient(to right, rgba(26, 58, 42, 0.8) 0%, rgba(26, 58, 42, 0.4) 40%, rgba(0,0,0,0) 100%)'
+            }}
+        />
+        
+        {/* "The Winner" Image - Father & Child, Warm, Messy, Sunlit */}
+        <img 
+          src="https://cdn.midjourney.com/f16fcd8a-88bb-4ac1-831d-0d56525aee1c/0_2.png" 
+          alt="Father and child baking in sunlit rustic kitchen" 
+          className="w-full h-[120%] object-cover filter sepia-[0.2] contrast-[1.1] saturate-[0.8]"
+        />
+      </motion.div>
+
+      {/* Content Layer - Aligned Left to sit in the gradient safe zone */}
+      <motion.div 
+        style={{ opacity }}
+        className="relative z-20 px-6 md:px-24 max-w-7xl w-full mx-auto flex flex-col items-start text-left"
+      >
+        <motion.span 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+          className="block text-gold font-sans uppercase tracking-[0.3em] text-sm md:text-base mb-6 ml-1"
+        >
+          Est. 1904 &mdash; Central Texas
+        </motion.span>
+        
+        <motion.h1 
+          initial={{ opacity: 0, x: -40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+          className="font-serif text-7xl md:text-9xl lg:text-[11rem] text-cream leading-[0.85] mb-8 mix-blend-soft-light origin-left"
+          onMouseEnter={onHoverStart}
+          onMouseLeave={onHoverEnd}
+        >
+          Eat<br />Different.
+        </motion.h1>
+
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.5, ease: "easeOut", delay: 0.8 }}
+          className="font-sans text-cream/90 text-lg md:text-xl max-w-md font-light leading-relaxed tracking-wide ml-2"
+        >
+          Slow food for a fast world. We mill heritage grains for people who give a damn about what they eat.
+        </motion.p>
+      </motion.div>
+
+      {/* Scroll Indicator */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2, duration: 1 }}
+        className="absolute bottom-12 left-12 z-20 flex items-center gap-4"
+      >
+        <div className="w-16 h-[1px] bg-cream/30 overflow-hidden relative">
+             <motion.div 
+                className="w-full h-full bg-gold absolute top-0 left-0"
+                animate={{ x: ["-100%", "100%"] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            />
+        </div>
+        <span className="text-cream/60 text-xs uppercase tracking-widest font-sans">Begin</span>
+      </motion.div>
+    </section>
+  );
+};
+
+export default Hero;
