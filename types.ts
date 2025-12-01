@@ -1,12 +1,13 @@
 
 export interface Product {
-    id: number;
+    id: number | string;
     name: string;
     description: string;
     price: number;
     image: string;
     weight: string;
-    category: 'wheat' | 'rye' | 'corn' | 'goods';
+    category: 'wheat' | 'rye' | 'corn' | 'goods' | string;
+    variantId?: string;
 }
 
 export interface CartItem extends Product {
