@@ -12,7 +12,7 @@ const Manifesto: React.FC = () => {
   const yText = useTransform(scrollYProgress, [0, 1], [100, -100]);
 
   return (
-    <section className="relative py-48 bg-forest overflow-hidden flex items-center justify-center min-h-[80vh]">
+    <section className="relative py-48 bg-forest flex items-center justify-center min-h-[80vh]">
       {/* Background Texture */}
       <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] mix-blend-overlay pointer-events-none" />
       
@@ -20,7 +20,7 @@ const Manifesto: React.FC = () => {
         style={{ scale, opacity }}
         className="relative z-10 text-center w-full flex flex-col items-center"
       >
-        <div className="overflow-hidden px-4">
+        <div className="px-4">
             <motion.h2 
                 style={{ y: yText }}
                 className="font-serif text-[15vw] leading-[0.85] text-cream font-bold tracking-tighter text-center uppercase"
