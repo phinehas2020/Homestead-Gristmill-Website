@@ -13,7 +13,7 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
-    <section id="mill" className="relative h-screen w-full overflow-x-hidden flex flex-col justify-center">
+    <section id="mill" className="relative h-screen w-full overflow-x-hidden flex flex-col">
       {/* Background Parallax Layer */}
       <motion.div
         style={{ y: y1 }}
@@ -50,7 +50,7 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
       {/* Content Layer - Aligned Left in the dark zone */}
       <motion.div
         style={{ opacity }}
-        className="relative z-20 px-6 md:px-24 max-w-7xl w-full mx-auto flex flex-col items-start text-left"
+        className="relative z-20 px-6 md:px-24 max-w-7xl w-full mx-auto flex flex-col items-start text-left pt-[25vh] md:pt-[30vh]"
       >
         {/* Mobile only Est label */}
         <motion.span
@@ -63,7 +63,7 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
         </motion.span>
 
         <div
-          className="font-serif text-6xl md:text-9xl lg:text-[11rem] text-cream mb-12 relative z-50 flex flex-col items-start"
+          className="font-serif text-6xl md:text-9xl lg:text-[10rem] text-cream mb-12 relative z-50 flex flex-col items-start"
           onMouseEnter={onHoverStart}
           onMouseLeave={onHoverEnd}
         >
@@ -71,7 +71,7 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
-            className="block leading-[1.1] pt-24 pb-2 overflow-visible origin-left"
+            className="block leading-[1.3] pt-4 pb-4 overflow-visible origin-left"
           >
             Eat
           </motion.span>
@@ -79,7 +79,7 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: 0.6 }}
-            className="block leading-[1.1] pt-4 overflow-visible origin-left"
+            className="block leading-[1.3] pt-2 overflow-visible origin-left"
           >
             Different.
           </motion.span>
