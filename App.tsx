@@ -15,7 +15,6 @@ import Cart from './components/Cart';
 const NAV_ITEMS = [
   { name: 'Our Story', id: 'story', action: 'scroll' },
   { name: 'Shop Flour', id: 'products', action: 'route', path: '/products' },
-  { name: 'The Test Kitchen', id: 'kitchen', action: 'scroll' },
   { name: 'The Mill', id: 'mill', action: 'scroll' }
 ];
 

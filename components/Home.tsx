@@ -4,7 +4,6 @@ import Hero from './Hero';
 import Shop from './Shop';
 import Narrative from './Narrative';
 import Manifesto from './Manifesto';
-import KitchenLab from './KitchenLab';
 import { Product } from '../types';
 
 interface HomeProps {
@@ -34,8 +33,6 @@ const Home: React.FC<HomeProps> = ({ products, addToCart, onHoverStart, onHoverE
             <Narrative />
 
             <Manifesto />
-
-            <KitchenLab onHoverStart={onHoverStart} onHoverEnd={onHoverEnd} />
         </motion.div>
     );
 };
