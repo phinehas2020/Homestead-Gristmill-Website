@@ -23,7 +23,7 @@ const Manifesto: React.FC = () => {
         <div className="px-4">
             <motion.h2 
                 style={{ y: yText }}
-                className="font-serif text-[15vw] leading-[0.85] text-cream font-bold tracking-tighter text-center uppercase"
+                className="font-serif text-[15vw] leading-[0.85] text-cream font-bold tracking-tighter text-center uppercase space-y-4 md:space-y-6"
             >
                 <span className="block text-gold mix-blend-hard-light">Eat</span>
                 <span className="block text-cream mix-blend-difference">Different</span>
