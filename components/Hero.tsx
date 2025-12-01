@@ -13,7 +13,7 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
-    <section id="mill" className="relative h-screen w-full overflow-x-hidden flex flex-col">
+    <section id="mill" className="relative h-screen w-full overflow-hidden flex flex-col">
       {/* Background Parallax Layer */}
       <motion.div
         style={{ y: y1 }}
