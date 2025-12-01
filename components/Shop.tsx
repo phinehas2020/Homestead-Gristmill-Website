@@ -82,13 +82,7 @@ const Shop: React.FC<ShopProps> = ({ products, addToCart, onHoverStart, onHoverE
           {products.map((product, index) => (
             <ProductCard
               key={product.id}
-              product={{
-                ...product,
-                // Use specific seeds for flour textures based on index/id
-                image: index === 0 ? "https://picsum.photos/seed/brown_paper_flour_sack/600/800" :
-                  index === 1 ? "https://picsum.photos/seed/dark_rye_grain_texture/600/800" :
-                    "https://picsum.photos/seed/white_pastry_flour_pile/600/800"
-              }}
+              product={product}
               addToCart={addToCart}
               onHoverStart={onHoverStart}
               onHoverEnd={onHoverEnd}
