@@ -28,12 +28,12 @@ function AppContent() {
   const mappedProducts: Product[] = shopifyProducts.map((p: any) => ({
     id: p.id,
     name: p.title,
-    description: p.description,
-    price: parseFloat(p.variants[0]?.price?.amount || '0'),
-    image: p.images[0]?.src || '',
-    weight: p.variants[0]?.title || 'Standard', // Assuming variant title holds weight info or similar
-    category: p.productType?.toLowerCase() || 'goods', // Use productType as category
-    variantId: p.variants[0]?.id // Store variant ID for adding to cart
+    description: p.description || '',
+    price: parseFloat(p.variants?.[0]?.price?.amount || '0'),
+    image: p.images?.[0]?.src || 'https://picsum.photos/seed/flour/600/800', // Fallback image
+    weight: p.variants?.[0]?.title || 'Standard',
+    category: p.productType?.toLowerCase() || 'goods',
+    variantId: p.variants?.[0]?.id
   }));
 
   // Scroll to top on route change

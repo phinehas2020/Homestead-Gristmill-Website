@@ -39,8 +39,12 @@ export const ShopifyProvider: React.FC<ShopifyProviderProps> = ({ children }) =>
 
     useEffect(() => {
         // Fetch all products
+        console.log("Fetching products from Shopify...");
         client.product.fetchAll().then((products) => {
+            console.log("Fetched products:", products);
             setProducts(products);
+        }).catch(err => {
+            console.error("Failed to fetch products:", err);
         });
 
         // Initialize cart
