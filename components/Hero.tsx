@@ -62,16 +62,28 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
           Est. 1904
         </motion.span>
 
-        <motion.h1
-          initial={{ opacity: 0, x: -40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
-          className="font-serif text-6xl md:text-9xl lg:text-[11rem] text-cream leading-[1.5] pt-32 pb-12 mb-8 overflow-visible origin-left z-50 relative block"
+        <div
+          className="font-serif text-6xl md:text-9xl lg:text-[11rem] text-cream mb-12 relative z-50 flex flex-col items-start"
           onMouseEnter={onHoverStart}
           onMouseLeave={onHoverEnd}
         >
-          Eat<br />Different.
-        </motion.h1>
+          <motion.span
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+            className="block leading-[1.1] pt-24 pb-2 overflow-visible origin-left"
+          >
+            Eat
+          </motion.span>
+          <motion.span
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: 0.6 }}
+            className="block leading-[1.1] pt-4 overflow-visible origin-left"
+          >
+            Different.
+          </motion.span>
+        </div>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
