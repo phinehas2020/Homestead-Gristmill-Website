@@ -66,7 +66,7 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
           initial={{ opacity: 0, x: -40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
-          className="font-serif text-7xl md:text-9xl lg:text-[11rem] text-cream leading-[0.9] pt-4 mb-12 mix-blend-normal origin-left"
+          className="font-serif text-7xl md:text-9xl lg:text-[11rem] text-cream leading-[1.1] pt-8 mb-12 mix-blend-normal origin-left"
           onMouseEnter={onHoverStart}
           onMouseLeave={onHoverEnd}
         >
