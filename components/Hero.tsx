@@ -13,7 +13,7 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
-    <section id="mill" className="relative h-screen w-full overflow-hidden flex flex-col justify-center">
+    <section id="mill" className="relative h-screen w-full overflow-x-hidden flex flex-col justify-center">
       {/* Background Parallax Layer */}
       <motion.div
         style={{ y: y1 }}
@@ -66,7 +66,7 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
           initial={{ opacity: 0, x: -40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
-          className="font-serif text-7xl md:text-9xl lg:text-[11rem] text-cream leading-[1.15] pt-12 pb-4 mb-8 overflow-visible origin-left z-50 relative"
+          className="font-serif text-6xl md:text-9xl lg:text-[11rem] text-cream leading-[1.3] py-4 mb-8 overflow-visible origin-left z-50 relative"
           onMouseEnter={onHoverStart}
           onMouseLeave={onHoverEnd}
         >
