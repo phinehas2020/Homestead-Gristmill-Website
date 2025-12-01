@@ -99,7 +99,7 @@ const Narrative: React.FC = () => {
               viewport={{ once: true }}
               className="font-serif text-5xl md:text-7xl text-forest leading-tight"
             >
-              Life returns to the <span className="text-clay">stone</span>.
+              Wholesome flour <span className="text-clay">returns</span>.
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
