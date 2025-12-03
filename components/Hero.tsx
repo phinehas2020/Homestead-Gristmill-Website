@@ -35,7 +35,7 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
         />
       </motion.div>
 
-      {/* Vertical "Est. 1904" Label */}
+      {/* Vertical "Est. 1989" Label */}
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -43,7 +43,7 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
         className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 z-30 hidden md:block"
       >
         <span className="block text-gold font-sans uppercase tracking-[0.3em] text-xs -rotate-90 whitespace-nowrap origin-center">
-          Est. 1904 &mdash; Central Texas
+          Est. 1989 &mdash; Central Texas
         </span>
       </motion.div>
 
@@ -59,7 +59,7 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
           transition={{ duration: 1, delay: 0.2 }}
           className="md:hidden block text-gold font-sans uppercase tracking-[0.3em] text-xs mb-4"
         >
-          Est. 1904
+          Est. 1989
         </motion.span>
 
         <div
