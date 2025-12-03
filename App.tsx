@@ -43,29 +43,34 @@ function AppContent() {
   const pantryCollection = collections.find((c: any) => c.title === 'Pantry');
 
   // Fallback: Filter by specific names if collection is missing
+  // Prioritize the Donut Mix!
   const PANTRY_PRODUCT_NAMES = [
+    "Apple Cider Cake Donut Mix",
     "Stoneground Polenta",
     "Homestead Porridge",
     "Gingerbread Mix",
     "Pancake Mix",
-    "Biscuit Mix",
-    "Apple Cider Cake Donut Mix"
+    "Biscuit Mix"
   ];
 
   // Logic: Use collection if found, OTHERWISE search by name
-  // PROBLEM: If collection exists but is missing items, we miss them.
-  // FIX: Let's try to COMBINE them or just use the name filter if the collection is empty/missing.
-
   let pantryProducts = [];
 
   if (pantryCollection && pantryCollection.products.length > 0) {
     pantryProducts = pantryCollection.products.map(mapProduct);
   } else {
-    pantryProducts = mappedProducts.filter(p => PANTRY_PRODUCT_NAMES.some(name => p.name.includes(name)));
+    // Filter and sort based on the order in PANTRY_PRODUCT_NAMES
+    pantryProducts = mappedProducts
+      .filter(p => PANTRY_PRODUCT_NAMES.some(name => p.name.includes(name)))
+      .sort((a, b) => {
+        const indexA = PANTRY_PRODUCT_NAMES.findIndex(name => a.name.includes(name));
+        const indexB = PANTRY_PRODUCT_NAMES.findIndex(name => b.name.includes(name));
+        return indexA - indexB;
+      });
   }
 
-  // If still no products found (e.g. names don't match), fallback to first 3
-  const finalPantryProducts = pantryProducts.length > 0 ? pantryProducts : mappedProducts.slice(0, 3);
+  // Always limit to 3 items to maintain layout
+  const finalPantryProducts = (pantryProducts.length > 0 ? pantryProducts : mappedProducts).slice(0, 3);
 
   // Scroll to top on route change
   useEffect(() => {
