@@ -40,38 +40,60 @@ export const ShopifyProvider: React.FC<ShopifyProviderProps> = ({ children }) =>
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     useEffect(() => {
-        // Fetch all products
-        console.log("Fetching products from Shopify...");
-        client.product.fetchAll().then((products) => {
-            console.log("Fetched products:", products);
-            setProducts(products);
-        }).catch(err => {
-            console.error("Failed to fetch products:", err);
-        });
+        // Fetch all products and collections (with their products) together
+        const fetchData = async () => {
+            try {
+                console.log("Fetching products and collections from Shopify...");
 
-        // Fetch all collections (try simple fetch first)
-        console.log("Fetching collections from Shopify...");
-        client.collection.fetchAll().then((collections) => {
-            console.log("Fetched collections (no products):", collections);
+                const [allProducts, allCollectionsWithProducts] = await Promise.all([
+                    client.product.fetchAll(),
+                    client.collection.fetchAllWithProducts(),
+                ]);
 
-            // If we found collections, let's try to fetch products for them or just store them
-            // For now, let's just see if we get the collections themselves
-            setCollections(collections);
+                const handlesToEnsure = ["pantry", "wheat"];
 
-            // If we find a 'Pantry' collection, let's fetch its products specifically
-            const pantry = collections.find((c: any) => c.title === 'Pantry' || c.handle === 'pantry');
-            if (pantry) {
-                console.log("Found Pantry collection, fetching products...", pantry.id);
-                client.collection.fetchWithProducts(pantry.id).then((collectionWithProducts) => {
-                    console.log("Fetched Pantry with products:", collectionWithProducts);
-                    // Update the collections state to include this detailed collection
-                    setCollections(prev => prev.map(c => c.id === pantry.id ? collectionWithProducts : c));
+                // Always refetch critical collections by handle to guarantee products are hydrated
+                // even when fetchAllWithProducts paginates past them or returns partial data.
+                const ensuredCollections = await Promise.all(
+                    handlesToEnsure.map(async (handle) => {
+                        try {
+                            const collection = await client.collection.fetchByHandle(handle, { productsFirst: 250 });
+                            if (collection) return collection;
+                        } catch (error) {
+                            console.warn(`Collection fetch by handle failed for ${handle}:`, error);
+                        }
+                        return null;
+                    })
+                );
+
+                // Merge collections, preferring the explicitly fetched versions for pantry/wheat
+                const collectionMap = new Map<string, any>();
+
+                allCollectionsWithProducts.forEach((collection: any) => {
+                    const handle = collection?.handle?.toLowerCase?.();
+                    if (!handle) return;
+                    collectionMap.set(handle, collection);
                 });
-            }
 
-        }).catch(err => {
-            console.error("Failed to fetch collections:", err);
-        });
+                ensuredCollections.filter(Boolean).forEach((collection) => {
+                    const handle = collection?.handle?.toLowerCase?.();
+                    if (!handle) return;
+                    collectionMap.set(handle, collection);
+                });
+
+                const mergedCollections = Array.from(collectionMap.values());
+
+                console.log("Fetched products:", allProducts);
+                console.log("Fetched collections with products (merged):", mergedCollections);
+
+                setProducts(allProducts);
+                setCollections(mergedCollections);
+            } catch (err) {
+                console.error("Failed to fetch Shopify data:", err);
+            }
+        };
+
+        fetchData();
 
         // Initialize cart
         const checkoutId = localStorage.getItem('checkout_id');
