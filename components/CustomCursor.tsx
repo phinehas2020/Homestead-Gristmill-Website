@@ -44,7 +44,7 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ variant, isMenuOpen = false
         clearTimeout(timeout);
         timeout = setTimeout(() => {
           setIsVisible(false);
-        }, 2000);
+        }, 1000);
       }
     };
 
@@ -54,7 +54,7 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ variant, isMenuOpen = false
       window.addEventListener('click', handleActivity);
 
       // Initial timeout
-      timeout = setTimeout(() => setIsVisible(false), 2000);
+      timeout = setTimeout(() => setIsVisible(false), 1000);
     } else {
       setIsVisible(true);
     }
@@ -98,8 +98,6 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ variant, isMenuOpen = false
       opacity: isVisible ? 1 : 0,
     }
   };
-
-  if (!isVisible && isMobile) return null;
 
   return (
     <motion.div

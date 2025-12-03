@@ -337,9 +337,9 @@ function AppContent() {
           </div>
           <div className="font-sans text-cream/80 space-y-4">
             <h4 className="uppercase text-xs tracking-widest text-gold mb-6">Visit</h4>
-            <p>1294 Mill Road</p>
+            <p>800 Dry Creek Road Suite B</p>
             <p>Waco, Texas 76705</p>
-            <p>hello@honesttable.com</p>
+            <p>info@homesteadgristmill.com</p>
           </div>
         </div>
         <div className="mt-24 text-center font-sans text-cream/20 text-xs">
