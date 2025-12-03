@@ -70,29 +70,30 @@ function AppContent() {
   // Map all products (re-compute when we have collections so categories can use collection membership)
   const mappedProducts: Product[] = useMemo(() => shopifyProducts.map(mapProduct), [shopifyProducts, mapProduct]);
 
-  // Get Pantry products
-  const pantryCollection = collections.find((c: any) =>
-    c?.title?.toLowerCase?.() === 'pantry' || c?.handle?.toLowerCase?.() === 'pantry'
-  );
+  // Get pantry product IDs from the collection lookup
+  const pantryProductIds = collectionProductLookup.get('pantry');
 
-  // Fallback: Filter by specific names if collection is missing
-  // Prioritize the Donut Mix!
-  const PANTRY_PRODUCT_NAMES = [
-    "Apple Cider Cake Donut Mix",
-    "Stoneground Polenta",
-    "Homestead Porridge",
-    "Gingerbread Mix",
-    "Pancake Mix",
-    "Biscuit Mix"
-  ];
+  // Logic: Use collection product IDs to filter from all products
+  let pantryProducts: Product[] = [];
 
-  // Logic: Use collection if found, OTHERWISE search by name
-  let pantryProducts = [];
+  if (pantryProductIds && pantryProductIds.size > 0) {
+    // Filter mapped products to only those in the Pantry collection
+    pantryProducts = mappedProducts.filter(p => {
+      const productId = p.id?.toString?.() || '';
+      return pantryProductIds.has(productId);
+    });
+  }
 
-  if (pantryCollection && Array.isArray(pantryCollection.products) && pantryCollection.products.length > 0) {
-    pantryProducts = pantryCollection.products.map(mapProduct);
-  } else {
-    // Filter and sort based on the order in PANTRY_PRODUCT_NAMES
+  // Fallback: Filter by specific names if collection is empty
+  if (pantryProducts.length === 0) {
+    const PANTRY_PRODUCT_NAMES = [
+      "Apple Cider Cake Donut Mix",
+      "Stoneground Polenta",
+      "Homestead Porridge",
+      "Gingerbread Mix",
+      "Pancake Mix",
+      "Biscuit Mix"
+    ];
     pantryProducts = mappedProducts
       .filter(p => PANTRY_PRODUCT_NAMES.some(name => p.name.includes(name)))
       .sort((a, b) => {
