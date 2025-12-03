@@ -24,42 +24,19 @@ function AppContent() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const getCollectionProducts = useCallback((collection: any) => {
-    if (!collection) return [];
-
-    const normalizeProducts = (input: any) => {
-      if (!input) return [];
-      if (Array.isArray(input)) return input;
-      if (Array.isArray(input?.models)) return input.models;
-      if (Array.isArray(input?.edges)) return input.edges.map((edge: any) => edge?.node ?? edge).filter(Boolean);
-      if (Array.isArray(input?.nodes)) return input.nodes;
-      return [];
-    };
-
-    // Handle both plain objects and Shopify Buy Client GraphModel instances
-    const directProducts = normalizeProducts(collection.products);
-    if (directProducts.length > 0) return directProducts;
-
-    const jsonProducts = typeof collection.toJSON === 'function' ? normalizeProducts(collection.toJSON()?.products) : [];
-    return jsonProducts;
-  }, []);
-
   // Collection membership lookup for quick category detection
   const collectionProductLookup = useMemo(() => {
     const lookup = new Map<string, Set<string>>();
 
     collections.forEach((collection: any) => {
-      if (!collection || !collection.handle) return;
+      if (!collection || !collection.handle || !Array.isArray(collection.products)) return;
       const handle = collection.handle.toLowerCase();
-      const collectionProducts = getCollectionProducts(collection);
-      if (collectionProducts.length === 0) return;
-
-      const productIds = new Set<string>(collectionProducts.map((product: any) => product.id?.toString?.() || ''));
+      const productIds = new Set<string>(collection.products.map((product: any) => product.id?.toString?.() || ''));
       lookup.set(handle, productIds);
     });
 
     return lookup;
-  }, [collections, getCollectionProducts]);
+  }, [collections]);
 
   // Helper to map Shopify products to internal Product type
   const mapProduct = useCallback((p: any): Product => {
