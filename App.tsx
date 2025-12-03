@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, Menu, X } from 'lucide-react';
@@ -24,23 +24,44 @@ function AppContent() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Helper to map Shopify products to internal Product type
-  const mapProduct = (p: any): Product => ({
-    id: p.id,
-    name: p.title,
-    description: p.description || '',
-    price: parseFloat(p.variants?.[0]?.price?.amount || '0'),
-    image: p.images?.[0]?.src || 'https://picsum.photos/seed/flour/600/800', // Fallback image
-    weight: p.variants?.[0]?.title || 'Standard',
-    category: p.productType?.toLowerCase().trim() || 'goods',
-    variantId: p.variants?.[0]?.id
-  });
+  // Collection membership lookup for quick category detection
+  const collectionProductLookup = useMemo(() => {
+    const lookup = new Map<string, Set<string>>();
 
-  // Map all products
-  const mappedProducts: Product[] = shopifyProducts.map(mapProduct);
+    collections.forEach((collection: any) => {
+      if (!collection || !collection.handle || !Array.isArray(collection.products)) return;
+      const handle = collection.handle.toLowerCase();
+      const productIds = new Set<string>(collection.products.map((product: any) => product.id?.toString?.() || ''));
+      lookup.set(handle, productIds);
+    });
+
+    return lookup;
+  }, [collections]);
+
+  // Helper to map Shopify products to internal Product type
+  const mapProduct = useCallback((p: any): Product => {
+    const productId = p.id?.toString?.() || '';
+    const isWheat = collectionProductLookup.get('wheat')?.has(productId);
+
+    return {
+      id: p.id,
+      name: p.title,
+      description: p.description || '',
+      price: parseFloat(p.variants?.[0]?.price?.amount || '0'),
+      image: p.images?.[0]?.src || 'https://picsum.photos/seed/flour/600/800', // Fallback image
+      weight: p.variants?.[0]?.title || 'Standard',
+      category: isWheat ? 'wheat' : p.productType?.toLowerCase().trim() || 'goods',
+      variantId: p.variants?.[0]?.id
+    };
+  }, [collectionProductLookup]);
+
+  // Map all products (re-compute when we have collections so categories can use collection membership)
+  const mappedProducts: Product[] = useMemo(() => shopifyProducts.map(mapProduct), [shopifyProducts, mapProduct]);
 
   // Get Pantry products
-  const pantryCollection = collections.find((c: any) => c.title === 'Pantry');
+  const pantryCollection = collections.find((c: any) =>
+    c?.title?.toLowerCase?.() === 'pantry' || c?.handle?.toLowerCase?.() === 'pantry'
+  );
 
   // Fallback: Filter by specific names if collection is missing
   // Prioritize the Donut Mix!
