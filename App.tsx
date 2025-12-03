@@ -77,8 +77,11 @@ function AppContent() {
   // Logic: Use collection if found, OTHERWISE search by name
   let pantryProducts = [];
 
-  if (pantryCollection && pantryCollection.products.length > 0) {
-    pantryProducts = pantryCollection.products.map(mapProduct);
+  if (pantryCollection) {
+    const pantryCollectionProducts = getCollectionProducts(pantryCollection);
+    if (pantryCollectionProducts.length > 0) {
+      pantryProducts = pantryCollectionProducts.map(mapProduct);
+    }
   } else {
     // Filter and sort based on the order in PANTRY_PRODUCT_NAMES
     pantryProducts = mappedProducts
