@@ -49,11 +49,26 @@ export const ShopifyProvider: React.FC<ShopifyProviderProps> = ({ children }) =>
             console.error("Failed to fetch products:", err);
         });
 
-        // Fetch all collections with products
+        // Fetch all collections (try simple fetch first)
         console.log("Fetching collections from Shopify...");
-        client.collection.fetchAllWithProducts().then((collections) => {
-            console.log("Fetched collections:", collections);
+        client.collection.fetchAll().then((collections) => {
+            console.log("Fetched collections (no products):", collections);
+
+            // If we found collections, let's try to fetch products for them or just store them
+            // For now, let's just see if we get the collections themselves
             setCollections(collections);
+
+            // If we find a 'Pantry' collection, let's fetch its products specifically
+            const pantry = collections.find((c: any) => c.title === 'Pantry' || c.handle === 'pantry');
+            if (pantry) {
+                console.log("Found Pantry collection, fetching products...", pantry.id);
+                client.collection.fetchWithProducts(pantry.id).then((collectionWithProducts) => {
+                    console.log("Fetched Pantry with products:", collectionWithProducts);
+                    // Update the collections state to include this detailed collection
+                    setCollections(prev => prev.map(c => c.id === pantry.id ? collectionWithProducts : c));
+                });
+            }
+
         }).catch(err => {
             console.error("Failed to fetch collections:", err);
         });
