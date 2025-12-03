@@ -44,9 +44,10 @@ export const ShopifyProvider: React.FC<ShopifyProviderProps> = ({ children }) =>
         const fetchData = async () => {
             try {
                 console.log("Fetching products and collections from Shopify...");
+                // Fetch enough records so we don't miss collections like Pantry/Goods or products beyond the first page
                 const [allProducts, allCollectionsWithProducts] = await Promise.all([
-                    client.product.fetchAll(),
-                    client.collection.fetchAllWithProducts(),
+                    client.product.fetchAll(250),
+                    client.collection.fetchAllWithProducts({ first: 250, productsFirst: 250 }),
                 ]);
 
                 console.log("Fetched products:", allProducts);

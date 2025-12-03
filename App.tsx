@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, Menu, X } from 'lucide-react';
 import { Product, CursorVariant } from './types';
 import { ShopifyProvider, useShopify } from './context/ShopifyContext';
+import { COLLECTION_MAPPINGS, FALLBACK_PANTRY_NAMES } from './lib/collectionConfig';
 
 // Components
 import CustomCursor from './components/CustomCursor';
@@ -24,19 +25,84 @@ function AppContent() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Build a lookup of collection IDs keyed by category
+  const collectionIdsByCategory = useMemo(() => {
+    const map = new Map<string, Set<string>>();
+    COLLECTION_MAPPINGS.forEach(({ category, ids }) => {
+      if (!ids) return;
+      if (!map.has(category)) map.set(category, new Set<string>());
+      const set = map.get(category)!;
+      ids.forEach(id => {
+        if (id) set.add(id.toLowerCase());
+      });
+    });
+    return map;
+  }, []);
+
+  // GraphQL helper: collection.products can be an array, a GraphModel connection with models, or edges
+  const extractCollectionProducts = useCallback((collection: any) => {
+    if (!collection || !collection.products) return [];
+    const { products } = collection;
+
+    if (Array.isArray(products)) return products;
+    if (Array.isArray(products?.models)) return products.models;
+    if (Array.isArray(products?.edges)) return products.edges.map((edge: any) => edge?.node).filter(Boolean);
+
+    return [];
+  }, []);
+
+  // Normalize various handles/titles to our internal category keys using the shared mapping file
+  const normalizeCategoryKey = useCallback((value: string) => {
+    const key = value?.toLowerCase?.().trim() || '';
+    if (!key) return '';
+    const match = COLLECTION_MAPPINGS.find(mapping => {
+      const handles = mapping.handles?.map(h => h.toLowerCase()) || [];
+      const keywords = mapping.keywords?.map(k => k.toLowerCase()) || [];
+      return handles.includes(key) || keywords.some(k => key.includes(k));
+    });
+    return match?.category || '';
+  }, []);
+
   // Collection membership lookup for quick category detection
   const collectionProductLookup = useMemo(() => {
     const lookup = new Map<string, Set<string>>();
 
     collections.forEach((collection: any) => {
-      if (!collection || !collection.handle || !Array.isArray(collection.products)) return;
-      const handle = collection.handle.toLowerCase();
-      const productIds = new Set<string>(collection.products.map((product: any) => product.id?.toString?.() || ''));
-      lookup.set(handle, productIds);
+      if (!collection) return;
+
+      const keys = [
+        normalizeCategoryKey(collection.handle || ''),
+        normalizeCategoryKey(collection.title || '')
+      ].filter(Boolean);
+
+      // Tag by explicit collection IDs from config
+      const collectionId = collection?.id?.toString?.().toLowerCase?.() || '';
+      if (collectionId) {
+        for (const [category, idSet] of collectionIdsByCategory.entries()) {
+          if (idSet.has(collectionId)) {
+            keys.push(category);
+          }
+        }
+      }
+
+      if (keys.length === 0) return;
+
+      const productsInCollection = extractCollectionProducts(collection);
+      if (productsInCollection.length === 0) return;
+
+      const productIds = productsInCollection
+        .map((product: any) => product?.id?.toString?.() || '')
+        .filter(Boolean);
+
+      keys.forEach((key) => {
+        if (!lookup.has(key)) lookup.set(key, new Set<string>());
+        const set = lookup.get(key)!;
+        productIds.forEach(id => set.add(id));
+      });
     });
 
     return lookup;
-  }, [collections]);
+  }, [collections, normalizeCategoryKey, extractCollectionProducts, collectionIdsByCategory]);
 
   // Helper to map Shopify products to internal Product type
   const mapProduct = useCallback((p: any): Product => {
@@ -48,8 +114,8 @@ function AppContent() {
     const isCorn = collectionProductLookup.get('corn')?.has(productId);
     const isRye = collectionProductLookup.get('rye')?.has(productId);
 
-    // Determine category from collection membership first, then fall back to productType
-    let category = p.productType?.toLowerCase().trim() || 'goods';
+    // Determine category from collection membership first, then fall back to normalized productType
+    let category = normalizeCategoryKey(p.productType || '') || 'other';
     if (isWheat) category = 'wheat';
     else if (isGoods) category = 'goods';
     else if (isCorn) category = 'corn';
@@ -65,13 +131,26 @@ function AppContent() {
       category,
       variantId: p.variants?.[0]?.id
     };
-  }, [collectionProductLookup]);
+  }, [collectionProductLookup, normalizeCategoryKey]);
 
   // Map all products (re-compute when we have collections so categories can use collection membership)
   const mappedProducts: Product[] = useMemo(() => shopifyProducts.map(mapProduct), [shopifyProducts, mapProduct]);
 
   // Get pantry product IDs from the collection lookup
   const pantryProductIds = collectionProductLookup.get('pantry');
+  const pantryProductOrder = useMemo(() => {
+    const pantryCollection = collections.find((collection: any) => {
+      const matchesHandleOrTitle = normalizeCategoryKey(collection?.handle || collection?.title || '') === 'pantry';
+      const collectionId = collection?.id?.toString?.().toLowerCase?.() || '';
+      const matchesId = collectionIdsByCategory.get('pantry')?.has(collectionId);
+      return matchesHandleOrTitle || matchesId;
+    });
+    if (!pantryCollection) return [];
+
+    return extractCollectionProducts(pantryCollection)
+      .map((product: any) => product?.id?.toString?.() || '')
+      .filter(Boolean);
+  }, [collections, normalizeCategoryKey, extractCollectionProducts, collectionIdsByCategory]);
 
   // Logic: Use collection product IDs to filter from all products
   let pantryProducts: Product[] = [];
@@ -82,18 +161,25 @@ function AppContent() {
       const productId = p.id?.toString?.() || '';
       return pantryProductIds.has(productId);
     });
+
+    // Preserve the order defined in the collection (best selling / manual order)
+    if (pantryProductOrder.length > 0) {
+      const orderIndex = new Map<string, number>();
+      pantryProductOrder.forEach((id, idx) => orderIndex.set(id, idx));
+
+      pantryProducts.sort((a, b) => {
+        const idA = a.id?.toString?.() || '';
+        const idB = b.id?.toString?.() || '';
+        const idxA = orderIndex.get(idA) ?? Number.MAX_SAFE_INTEGER;
+        const idxB = orderIndex.get(idB) ?? Number.MAX_SAFE_INTEGER;
+        return idxA - idxB;
+      });
+    }
   }
 
   // Fallback: Filter by specific names if collection is empty
   if (pantryProducts.length === 0) {
-    const PANTRY_PRODUCT_NAMES = [
-      "Apple Cider Cake Donut Mix",
-      "Stoneground Polenta",
-      "Homestead Porridge",
-      "Gingerbread Mix",
-      "Pancake Mix",
-      "Biscuit Mix"
-    ];
+    const PANTRY_PRODUCT_NAMES = FALLBACK_PANTRY_NAMES;
     pantryProducts = mappedProducts
       .filter(p => PANTRY_PRODUCT_NAMES.some(name => p.name.includes(name)))
       .sort((a, b) => {
