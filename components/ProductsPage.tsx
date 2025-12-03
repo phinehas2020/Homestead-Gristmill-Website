@@ -23,12 +23,26 @@ import { useNavigate } from 'react-router-dom';
 
 const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart, onHoverStart, onHoverEnd }) => {
   const [activeCategory, setActiveCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
   const filteredProducts = useMemo(() => {
-    if (activeCategory === 'all') return products;
-    return products.filter(p => p.category === activeCategory);
-  }, [products, activeCategory]);
+    let filtered = products;
+
+    if (activeCategory !== 'all') {
+      filtered = filtered.filter(p => p.category === activeCategory);
+    }
+
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(p =>
+        p.name.toLowerCase().includes(query) ||
+        p.description.toLowerCase().includes(query)
+      );
+    }
+
+    return filtered;
+  }, [products, activeCategory, searchQuery]);
 
   return (
     <motion.div
@@ -36,18 +50,18 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart, onHove
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8 }}
-      className="bg-bone min-h-screen pt-32 pb-24 px-6"
+      className="bg-bone min-h-screen pt-24 pb-24 px-4 md:px-6"
     >
       <div className="container mx-auto max-w-7xl">
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-forest/10 pb-12">
-          <div className="max-w-2xl">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-24 border-b border-forest/10 pb-8 md:pb-12">
+          <div className="max-w-2xl w-full">
             <motion.h1
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2, duration: 1 }}
-              className="font-serif text-6xl md:text-8xl text-forest mb-6"
+              className="font-serif text-5xl md:text-8xl text-forest mb-4 md:mb-6"
             >
               The Catalog
             </motion.h1>
@@ -55,21 +69,32 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart, onHove
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.4, duration: 1 }}
-              className="font-sans text-loam/80 text-lg max-w-lg leading-relaxed"
+              className="font-sans text-loam/80 text-base md:text-lg max-w-lg leading-relaxed mb-8"
             >
               Our full selection of stone-ground grains. Milled fresh to order in Central Texas.
             </motion.p>
+
+            {/* Search Input */}
+            <div className="relative max-w-md mb-8 md:mb-0">
+              <input
+                type="text"
+                placeholder="Search grains..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-transparent border-b border-forest/20 py-2 font-sans text-forest placeholder:text-forest/40 focus:outline-none focus:border-forest transition-colors"
+              />
+            </div>
           </div>
 
           {/* Filter Tabs */}
-          <div className="flex flex-wrap gap-6 mt-8 md:mt-0">
+          <div className="flex flex-wrap gap-4 md:gap-6 mt-4 md:mt-0">
             {CATEGORIES.map((cat, i) => (
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
                 onMouseEnter={onHoverStart}
                 onMouseLeave={onHoverEnd}
-                className={`font-sans uppercase tracking-widest text-sm transition-all duration-300 pb-1 border-b-2 ${activeCategory === cat.id
+                className={`font-sans uppercase tracking-widest text-xs md:text-sm transition-all duration-300 pb-1 border-b-2 ${activeCategory === cat.id
                   ? 'text-clay border-clay'
                   : 'text-loam/40 border-transparent hover:text-forest'
                   }`}
@@ -83,7 +108,7 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart, onHove
         {/* Product Grid */}
         <motion.div
           layout
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24"
+          className="grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-12 md:gap-x-12 md:gap-y-24"
         >
           <AnimatePresence mode='popLayout'>
             {filteredProducts.map((product) => (
@@ -98,7 +123,7 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart, onHove
                 onClick={() => navigate(`/product/${product.handle}`)}
               >
                 {/* Image Area */}
-                <div className="relative aspect-[4/5] mb-8 bg-cream overflow-hidden rounded-[4px]">
+                <div className="relative aspect-[4/5] mb-4 md:mb-8 bg-cream overflow-hidden rounded-[4px]">
                   <div className="absolute inset-0 bg-forest/5 group-hover:bg-transparent transition-colors duration-700" />
                   <motion.img
                     src={product.image}
@@ -115,21 +140,21 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart, onHove
                       }}
                       onMouseEnter={onHoverStart}
                       onMouseLeave={onHoverEnd}
-                      className="bg-cream text-forest px-8 py-4 rounded-full font-sans uppercase tracking-widest text-xs font-bold hover:bg-gold hover:text-forest transition-colors shadow-xl translate-y-4 group-hover:translate-y-0 transition-transform duration-500"
+                      className="bg-cream text-forest px-4 py-2 md:px-8 md:py-4 rounded-full font-sans uppercase tracking-widest text-[10px] md:text-xs font-bold hover:bg-gold hover:text-forest transition-colors shadow-xl translate-y-4 group-hover:translate-y-0 transition-transform duration-500"
                     >
-                      Add to Sack — ${product.price.toFixed(2)}
+                      Add — ${product.price.toFixed(2)}
                     </button>
                   </div>
                 </div>
 
                 {/* Text Area */}
-                <div className="text-center md:text-left">
-                  <div className="flex justify-between items-baseline mb-2">
-                    <h3 className="font-serif text-2xl text-forest group-hover:text-clay transition-colors duration-300">{product.name}</h3>
-                    <span className="font-sans text-forest font-medium">${product.price.toFixed(2)}</span>
+                <div className="text-left">
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-baseline mb-1 md:mb-2">
+                    <h3 className="font-serif text-lg md:text-2xl text-forest group-hover:text-clay transition-colors duration-300 leading-tight">{product.name}</h3>
+                    <span className="font-sans text-forest font-medium text-sm md:text-base mt-1 md:mt-0">${product.price.toFixed(2)}</span>
                   </div>
-                  <p className="font-sans text-loam/60 text-xs uppercase tracking-widest mb-3">{product.weight} • {product.category}</p>
-                  <p className="font-sans text-loam/80 leading-relaxed text-sm max-w-sm">{product.description}</p>
+                  <p className="font-sans text-loam/60 text-[10px] md:text-xs uppercase tracking-widest mb-2 md:mb-3">{product.weight}</p>
+                  <p className="font-sans text-loam/80 leading-relaxed text-xs md:text-sm max-w-sm hidden md:block">{product.description}</p>
                 </div>
               </motion.div>
             ))}
