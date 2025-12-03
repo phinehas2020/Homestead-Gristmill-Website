@@ -24,29 +24,19 @@ function AppContent() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const getCollectionProducts = useCallback((collection: any) => {
-    if (!collection) return [];
-    if (Array.isArray(collection.products)) return collection.products;
-    if (Array.isArray(collection.products?.edges)) return collection.products.edges.map((edge: any) => edge?.node).filter(Boolean);
-    return [];
-  }, []);
-
   // Collection membership lookup for quick category detection
   const collectionProductLookup = useMemo(() => {
     const lookup = new Map<string, Set<string>>();
 
     collections.forEach((collection: any) => {
-      if (!collection || !collection.handle) return;
+      if (!collection || !collection.handle || !Array.isArray(collection.products)) return;
       const handle = collection.handle.toLowerCase();
-      const collectionProducts = getCollectionProducts(collection);
-      if (collectionProducts.length === 0) return;
-
-      const productIds = new Set<string>(collectionProducts.map((product: any) => product.id?.toString?.() || ''));
+      const productIds = new Set<string>(collection.products.map((product: any) => product.id?.toString?.() || ''));
       lookup.set(handle, productIds);
     });
 
     return lookup;
-  }, [collections, getCollectionProducts]);
+  }, [collections]);
 
   // Helper to map Shopify products to internal Product type
   const mapProduct = useCallback((p: any): Product => {
