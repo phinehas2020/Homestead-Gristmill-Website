@@ -50,7 +50,7 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
       {/* Content Layer - Aligned Left in the dark zone */}
       <motion.div
         style={{ opacity }}
-        className="relative z-20 px-6 md:px-24 max-w-7xl w-full mx-auto flex flex-col items-start text-left pt-[25vh] md:pt-[30vh]"
+        className="relative z-20 px-6 md:pl-40 md:pr-24 max-w-7xl w-full mx-auto flex flex-col items-start text-left pt-[20vh] md:pt-[25vh]"
       >
         {/* Mobile only Est label */}
         <motion.span
@@ -63,7 +63,7 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
         </motion.span>
 
         <div
-          className="font-serif text-6xl md:text-9xl lg:text-[10rem] text-cream mb-12 relative z-50 flex flex-col items-start"
+          className="font-serif text-6xl md:text-8xl lg:text-[10rem] text-cream mb-8 relative z-50 flex flex-col items-start"
           onMouseEnter={onHoverStart}
           onMouseLeave={onHoverEnd}
         >
@@ -100,7 +100,7 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 1 }}
-        className="absolute bottom-12 left-6 md:left-12 z-20 flex items-center gap-4"
+        className="absolute bottom-12 left-6 md:left-12 z-40 flex items-center gap-4"
       >
         <div className="w-16 h-[1px] bg-cream/30 overflow-hidden relative">
           <motion.div
