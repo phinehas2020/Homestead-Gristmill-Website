@@ -41,16 +41,28 @@ function AppContent() {
   // Helper to map Shopify products to internal Product type
   const mapProduct = useCallback((p: any): Product => {
     const productId = p.id?.toString?.() || '';
+
+    // Check collection membership for category assignment
     const isWheat = collectionProductLookup.get('wheat')?.has(productId);
+    const isGoods = collectionProductLookup.get('goods')?.has(productId);
+    const isCorn = collectionProductLookup.get('corn')?.has(productId);
+    const isRye = collectionProductLookup.get('rye')?.has(productId);
+
+    // Determine category from collection membership first, then fall back to productType
+    let category = p.productType?.toLowerCase().trim() || 'goods';
+    if (isWheat) category = 'wheat';
+    else if (isGoods) category = 'goods';
+    else if (isCorn) category = 'corn';
+    else if (isRye) category = 'rye';
 
     return {
       id: p.id,
       name: p.title,
       description: p.description || '',
       price: parseFloat(p.variants?.[0]?.price?.amount || '0'),
-      image: p.images?.[0]?.src || 'https://picsum.photos/seed/flour/600/800', // Fallback image
+      image: p.images?.[0]?.src || 'https://picsum.photos/seed/flour/600/800',
       weight: p.variants?.[0]?.title || 'Standard',
-      category: isWheat ? 'wheat' : p.productType?.toLowerCase().trim() || 'goods',
+      category,
       variantId: p.variants?.[0]?.id
     };
   }, [collectionProductLookup]);
@@ -77,11 +89,8 @@ function AppContent() {
   // Logic: Use collection if found, OTHERWISE search by name
   let pantryProducts = [];
 
-  if (pantryCollection) {
-    const pantryCollectionProducts = getCollectionProducts(pantryCollection);
-    if (pantryCollectionProducts.length > 0) {
-      pantryProducts = pantryCollectionProducts.map(mapProduct);
-    }
+  if (pantryCollection && Array.isArray(pantryCollection.products) && pantryCollection.products.length > 0) {
+    pantryProducts = pantryCollection.products.map(mapProduct);
   } else {
     // Filter and sort based on the order in PANTRY_PRODUCT_NAMES
     pantryProducts = mappedProducts
