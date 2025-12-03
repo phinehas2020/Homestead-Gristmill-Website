@@ -52,9 +52,17 @@ function AppContent() {
     "Apple Cider Cake Donut Mix"
   ];
 
-  const pantryProducts = pantryCollection
-    ? pantryCollection.products.map(mapProduct)
-    : mappedProducts.filter(p => PANTRY_PRODUCT_NAMES.some(name => p.name.includes(name)));
+  // Logic: Use collection if found, OTHERWISE search by name
+  // PROBLEM: If collection exists but is missing items, we miss them.
+  // FIX: Let's try to COMBINE them or just use the name filter if the collection is empty/missing.
+
+  let pantryProducts = [];
+
+  if (pantryCollection && pantryCollection.products.length > 0) {
+    pantryProducts = pantryCollection.products.map(mapProduct);
+  } else {
+    pantryProducts = mappedProducts.filter(p => PANTRY_PRODUCT_NAMES.some(name => p.name.includes(name)));
+  }
 
   // If still no products found (e.g. names don't match), fallback to first 3
   const finalPantryProducts = pantryProducts.length > 0 ? pantryProducts : mappedProducts.slice(0, 3);
