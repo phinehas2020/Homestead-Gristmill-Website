@@ -8,7 +8,7 @@ import { Product } from '../types';
 
 interface HomeProps {
     products: Product[];
-    addToCart: (product: Product) => void;
+    addToCart: (product: Product, quantity?: number) => void;
     onHoverStart: () => void;
     onHoverEnd: () => void;
 }

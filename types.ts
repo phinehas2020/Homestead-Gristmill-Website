@@ -8,6 +8,7 @@ export interface Product {
     weight: string;
     category: 'wheat' | 'rye' | 'corn' | 'goods' | string;
     variantId?: string;
+    handle: string;
 }
 
 export interface CartItem extends Product {

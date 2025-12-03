@@ -6,12 +6,20 @@ import { ShoppingBag, Star } from 'lucide-react';
 
 interface ShopProps {
   products: Product[];
-  addToCart: (product: Product) => void;
+  addToCart: (product: Product, quantity?: number) => void;
   onHoverStart: () => void;
   onHoverEnd: () => void;
 }
 
-const ProductCard: React.FC<{ product: Product; addToCart: (p: Product) => void; onHoverStart: () => void; onHoverEnd: () => void }> = ({ product, addToCart, onHoverStart, onHoverEnd }) => {
+import { useNavigate } from 'react-router-dom';
+
+const ProductCard: React.FC<{ product: Product; addToCart: (p: Product, quantity?: number) => void; onHoverStart: () => void; onHoverEnd: () => void }> = ({ product, addToCart, onHoverStart, onHoverEnd }) => {
+  const navigate = useNavigate();
+
+  const handleProductClick = () => {
+    navigate(`/product/${product.handle}`);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -22,7 +30,8 @@ const ProductCard: React.FC<{ product: Product; addToCart: (p: Product) => void;
     >
       {/* Image Container with Organic Shape */}
       <div
-        className="relative w-full aspect-[3/4] mb-8 overflow-hidden bg-bone transition-all duration-700 ease-in-out"
+        onClick={handleProductClick}
+        className="relative w-full aspect-[3/4] mb-8 overflow-hidden bg-bone transition-all duration-700 ease-in-out cursor-pointer"
         style={{ borderRadius: '200px 200px 20px 20px' }} // Flour Sack Shape
       >
         <div className="absolute inset-0 bg-gold/0 group-hover:bg-gold/10 transition-colors duration-1000 z-10" />
@@ -36,7 +45,10 @@ const ProductCard: React.FC<{ product: Product; addToCart: (p: Product) => void;
 
         {/* Floating Add Button */}
         <button
-          onClick={() => addToCart(product)}
+          onClick={(e) => {
+            e.stopPropagation();
+            addToCart(product);
+          }}
           className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-forest text-cream px-6 py-3 rounded-full flex items-center gap-2 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out z-20 hover:bg-clay"
           onMouseEnter={onHoverStart}
           onMouseLeave={onHoverEnd}
@@ -47,8 +59,8 @@ const ProductCard: React.FC<{ product: Product; addToCart: (p: Product) => void;
       </div>
 
       {/* Product Info */}
-      <div className="space-y-2">
-        <h3 className="font-serif text-3xl text-forest">{product.name}</h3>
+      <div className="space-y-2 cursor-pointer" onClick={handleProductClick}>
+        <h3 className="font-serif text-3xl text-forest hover:text-clay transition-colors">{product.name}</h3>
         <p className="font-sans text-loam/60 text-sm uppercase tracking-widest">{product.weight}</p>
         <div className="flex items-center justify-center gap-4 mt-2">
           <p className="font-sans font-medium text-lg text-clay">${product.price.toFixed(2)}</p>

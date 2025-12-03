@@ -11,6 +11,7 @@ import { COLLECTION_MAPPINGS, FALLBACK_PANTRY_NAMES } from './lib/collectionConf
 import CustomCursor from './components/CustomCursor';
 import Home from './components/Home';
 import ProductsPage from './components/ProductsPage';
+import ProductDetail from './components/ProductDetail';
 import Cart from './components/Cart';
 
 const NAV_ITEMS = [
@@ -129,7 +130,8 @@ function AppContent() {
       image: p.images?.[0]?.src || 'https://picsum.photos/seed/flour/600/800',
       weight: p.variants?.[0]?.title || 'Standard',
       category,
-      variantId: p.variants?.[0]?.id
+      variantId: p.variants?.[0]?.id,
+      handle: p.handle
     };
   }, [collectionProductLookup, normalizeCategoryKey]);
 
@@ -197,9 +199,9 @@ function AppContent() {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  const handleAddToCart = async (product: Product) => {
+  const handleAddToCart = async (product: Product, quantity: number = 1) => {
     if (product.variantId) {
-      await shopifyAddToCart(product.variantId, 1);
+      await shopifyAddToCart(product.variantId, quantity);
       openCart();
     }
   };
@@ -301,6 +303,14 @@ function AppContent() {
           } />
           <Route path="/products" element={
             <ProductsPage
+              products={mappedProducts}
+              addToCart={handleAddToCart}
+              onHoverStart={hoverEnter}
+              onHoverEnd={mouseLeave}
+            />
+          } />
+          <Route path="/product/:handle" element={
+            <ProductDetail
               products={mappedProducts}
               addToCart={handleAddToCart}
               onHoverStart={hoverEnter}
