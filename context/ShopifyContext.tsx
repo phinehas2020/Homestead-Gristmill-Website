@@ -44,43 +44,16 @@ export const ShopifyProvider: React.FC<ShopifyProviderProps> = ({ children }) =>
         const fetchData = async () => {
             try {
                 console.log("Fetching products and collections from Shopify...");
-
                 const [allProducts, allCollectionsWithProducts] = await Promise.all([
                     client.product.fetchAll(),
                     client.collection.fetchAllWithProducts(),
                 ]);
 
-                const handlesToEnsure = ["pantry", "wheat"];
-                const existingHandles = new Set(
-                    allCollectionsWithProducts
-                        .map((c: any) => c?.handle?.toLowerCase?.())
-                        .filter(Boolean)
-                );
-
-                // Some collections occasionally don't appear in fetchAllWithProducts, so fetch by handle as a fallback.
-                const missingCollectionsPromises = handlesToEnsure
-                    .filter((handle) => !existingHandles.has(handle))
-                    .map(async (handle) => {
-                        try {
-                            const collection = await client.collection.fetchByHandle(handle, { productsFirst: 250 });
-                            if (collection) return collection;
-                        } catch (error) {
-                            console.warn(`Collection fetch by handle failed for ${handle}:`, error);
-                        }
-                        return null;
-                    });
-
-                const missingCollections = await Promise.all(missingCollectionsPromises);
-                const mergedCollections = [
-                    ...allCollectionsWithProducts,
-                    ...missingCollections.filter(Boolean),
-                ];
-
                 console.log("Fetched products:", allProducts);
-                console.log("Fetched collections with products (merged):", mergedCollections);
+                console.log("Fetched collections with products:", allCollectionsWithProducts);
 
                 setProducts(allProducts);
-                setCollections(mergedCollections);
+                setCollections(allCollectionsWithProducts);
             } catch (err) {
                 console.error("Failed to fetch Shopify data:", err);
             }
