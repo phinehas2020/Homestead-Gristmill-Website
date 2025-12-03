@@ -23,15 +23,61 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ variant, isMenuOpen = false
     return () => window.removeEventListener('mousemove', updateMousePosition);
   }, []);
 
+  const [isVisible, setIsVisible] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.matchMedia('(max-width: 768px)').matches);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    const handleActivity = () => {
+      setIsVisible(true);
+      if (isMobile) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          setIsVisible(false);
+        }, 2000);
+      }
+    };
+
+    if (isMobile) {
+      window.addEventListener('touchstart', handleActivity);
+      window.addEventListener('touchmove', handleActivity);
+      window.addEventListener('click', handleActivity);
+
+      // Initial timeout
+      timeout = setTimeout(() => setIsVisible(false), 2000);
+    } else {
+      setIsVisible(true);
+    }
+
+    return () => {
+      if (isMobile) {
+        window.removeEventListener('touchstart', handleActivity);
+        window.removeEventListener('touchmove', handleActivity);
+        window.removeEventListener('click', handleActivity);
+        clearTimeout(timeout);
+      }
+    };
+  }, [isMobile]);
+
   const variants = {
     default: {
       x: mousePosition.x - 16,
       y: mousePosition.y - 16,
       height: 32,
       width: 32,
-      // If menu is open (dark background), use Cream cursor. Else use Forest (light background).
       backgroundColor: isMenuOpen ? "#F9F7F2" : "rgba(26, 58, 42, 0.8)",
       mixBlendMode: "normal" as const,
+      opacity: isVisible ? 1 : 0,
     },
     hover: {
       x: mousePosition.x - 40,
@@ -40,16 +86,20 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ variant, isMenuOpen = false
       width: 80,
       backgroundColor: "rgb(255, 255, 255)",
       mixBlendMode: "difference" as const,
+      opacity: isVisible ? 1 : 0,
     },
     text: {
       x: mousePosition.x - 4,
       y: mousePosition.y - 16,
       height: 32,
       width: 8,
-      backgroundColor: "#D4AF37", // Gold
+      backgroundColor: "#D4AF37",
       mixBlendMode: "normal" as const,
+      opacity: isVisible ? 1 : 0,
     }
   };
+
+  if (!isVisible && isMobile) return null;
 
   return (
     <motion.div
@@ -60,7 +110,8 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ variant, isMenuOpen = false
         type: "spring",
         stiffness: 150,
         damping: 20,
-        mass: 0.8
+        mass: 0.8,
+        opacity: { duration: 0.3 }
       }}
     />
   );
