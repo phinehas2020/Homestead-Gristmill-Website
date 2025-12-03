@@ -91,7 +91,7 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
           transition={{ duration: 1.5, ease: "easeOut", delay: 0.8 }}
           className="font-sans text-cream/90 text-lg md:text-xl max-w-md font-light leading-relaxed tracking-wide ml-1"
         >
-          Slow food for a fast world. We mill heritage grains for people who give a damn about what they eat.
+          Slow food for a fast world. We mill heritage grains for people who care about what they eat.
         </motion.p>
       </motion.div>
 

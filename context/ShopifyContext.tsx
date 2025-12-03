@@ -3,6 +3,7 @@ import client from '../lib/shopify';
 
 interface ShopifyContextType {
     products: any[];
+    collections: any[];
     cart: any;
     isCartOpen: boolean;
     isMenuOpen: boolean;
@@ -33,6 +34,7 @@ interface ShopifyProviderProps {
 
 export const ShopifyProvider: React.FC<ShopifyProviderProps> = ({ children }) => {
     const [products, setProducts] = useState<any[]>([]);
+    const [collections, setCollections] = useState<any[]>([]);
     const [cart, setCart] = useState<any>(null);
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -45,6 +47,15 @@ export const ShopifyProvider: React.FC<ShopifyProviderProps> = ({ children }) =>
             setProducts(products);
         }).catch(err => {
             console.error("Failed to fetch products:", err);
+        });
+
+        // Fetch all collections with products
+        console.log("Fetching collections from Shopify...");
+        client.collection.fetchAllWithProducts().then((collections) => {
+            console.log("Fetched collections:", collections);
+            setCollections(collections);
+        }).catch(err => {
+            console.error("Failed to fetch collections:", err);
         });
 
         // Initialize cart
@@ -104,6 +115,7 @@ export const ShopifyProvider: React.FC<ShopifyProviderProps> = ({ children }) =>
     return (
         <ShopifyContext.Provider
             value={{
+                collections,
                 products,
                 cart,
                 isCartOpen,

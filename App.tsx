@@ -20,12 +20,12 @@ const NAV_ITEMS = [
 
 function AppContent() {
   const [cursorVariant, setCursorVariant] = useState<CursorVariant>('default');
-  const { products: shopifyProducts, cart, isMenuOpen, toggleMenu, closeMenu, openCart, addToCart: shopifyAddToCart } = useShopify();
+  const { products: shopifyProducts, collections, cart, isMenuOpen, toggleMenu, closeMenu, openCart, addToCart: shopifyAddToCart } = useShopify();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Map Shopify products to our internal Product type
-  const mappedProducts: Product[] = shopifyProducts.map((p: any) => ({
+  // Helper to map Shopify products to internal Product type
+  const mapProduct = (p: any): Product => ({
     id: p.id,
     name: p.title,
     description: p.description || '',
@@ -34,7 +34,16 @@ function AppContent() {
     weight: p.variants?.[0]?.title || 'Standard',
     category: p.productType?.toLowerCase() || 'goods',
     variantId: p.variants?.[0]?.id
-  }));
+  });
+
+  // Map all products
+  const mappedProducts: Product[] = shopifyProducts.map(mapProduct);
+
+  // Get Pantry products
+  const pantryCollection = collections.find((c: any) => c.title === 'Pantry');
+  const pantryProducts = pantryCollection
+    ? pantryCollection.products.map(mapProduct)
+    : mappedProducts.slice(0, 3);
 
   // Scroll to top on route change
   useEffect(() => {
@@ -137,7 +146,7 @@ function AppContent() {
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={
             <Home
-              products={mappedProducts.slice(0, 3)}
+              products={pantryProducts}
               addToCart={handleAddToCart}
               onHoverStart={hoverEnter}
               onHoverEnd={mouseLeave}
