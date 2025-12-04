@@ -32,7 +32,6 @@ const ProductCard: React.FC<{ product: Product; addToCart: (p: Product, quantity
       <div
         onClick={handleProductClick}
         className="relative w-full aspect-[3/4] mb-8 overflow-hidden bg-bone transition-all duration-700 ease-in-out cursor-pointer"
-        style={{ borderRadius: '200px 200px 20px 20px' }} // Flour Sack Shape
       >
         <div className="absolute inset-0 bg-gold/0 group-hover:bg-gold/10 transition-colors duration-1000 z-10" />
         <motion.img
@@ -53,7 +52,7 @@ const ProductCard: React.FC<{ product: Product; addToCart: (p: Product, quantity
           onMouseEnter={onHoverStart}
           onMouseLeave={onHoverEnd}
         >
-          <span className="font-sans text-sm uppercase tracking-wide">Add to Sack</span>
+          <span className="font-sans text-sm uppercase tracking-wide">Add to Cart</span>
           <ShoppingBag size={16} />
         </button>
       </div>
@@ -85,7 +84,7 @@ const Shop: React.FC<ShopProps> = ({ products, addToCart, onHoverStart, onHoverE
             The Pantry
           </motion.h2>
           <p className="font-sans text-loam text-lg">
-            Small batches. Stone ground. Packed by hand in unbleached cotton sacks.
+            Small batches. Stone ground. Freshly milled.
           </p>
         </div>
 
@@ -102,7 +101,7 @@ const Shop: React.FC<ShopProps> = ({ products, addToCart, onHoverStart, onHoverE
           ))}
         </div>
       </div>
-    </section>
+    </section >
   );
 };
 

@@ -32,7 +32,7 @@ const Cart: React.FC<CartProps> = ({ onHoverStart, onHoverEnd }) => {
                         className="fixed top-0 right-0 h-full w-full md:w-[450px] bg-cream z-50 shadow-2xl p-8 flex flex-col"
                     >
                         <div className="flex justify-between items-center mb-12">
-                            <h2 className="font-serif text-3xl text-forest">Your Sack</h2>
+                            <h2 className="font-serif text-3xl text-forest">Your Cart</h2>
                             <button onClick={closeCart} onMouseEnter={onHoverStart} onMouseLeave={onHoverEnd}>
                                 <X className="text-loam" />
                             </button>
@@ -41,7 +41,7 @@ const Cart: React.FC<CartProps> = ({ onHoverStart, onHoverEnd }) => {
                         <div className="flex-1 overflow-y-auto space-y-8">
                             {!cart?.lineItems?.length ? (
                                 <div className="text-center py-12">
-                                    <p className="font-sans text-loam/50">The sack is empty.</p>
+                                    <p className="font-sans text-loam/50">The cart is empty.</p>
                                 </div>
                             ) : (
                                 cart.lineItems.map((item: any) => (
