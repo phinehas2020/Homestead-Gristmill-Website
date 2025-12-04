@@ -47,7 +47,7 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
           className="hidden md:block absolute -left-12 lg:-left-16 top-1/2 -translate-y-1/2 z-30"
         >
           <span className="block text-gold font-sans uppercase tracking-[0.3em] text-xs -rotate-90 whitespace-nowrap origin-center">
-            Est. 1989 &mdash; Central Texas
+            Est. 2003 &mdash; Central Texas
           </span>
         </motion.div>
 

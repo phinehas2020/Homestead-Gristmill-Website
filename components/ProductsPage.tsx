@@ -154,7 +154,7 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart, onHove
                     <span className="font-sans text-forest font-medium text-sm md:text-base mt-1 md:mt-0">${product.price.toFixed(2)}</span>
                   </div>
                   <p className="font-sans text-loam/60 text-[10px] md:text-xs uppercase tracking-widest mb-2 md:mb-3">{product.weight}</p>
-                  <p className="font-sans text-loam/80 leading-relaxed text-xs md:text-sm max-w-sm hidden md:block">{product.description}</p>
+
                 </div>
               </motion.div>
             ))}
