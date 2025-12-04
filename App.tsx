@@ -13,9 +13,10 @@ import Home from './components/Home';
 import ProductsPage from './components/ProductsPage';
 import ProductDetail from './components/ProductDetail';
 import Cart from './components/Cart';
+import StoryPage from './components/StoryPage';
 
 const NAV_ITEMS = [
-  { name: 'Our Story', id: 'story', action: 'scroll' },
+  { name: 'Our Story', id: 'story', action: 'route', path: '/story' },
   { name: 'Shop Flour', id: 'products', action: 'route', path: '/products' },
   { name: 'The Mill', id: 'mill', action: 'scroll' }
 ];
@@ -301,6 +302,9 @@ function AppContent() {
               onHoverEnd={mouseLeave}
             />
           } />
+          <Route path="/story" element={
+            <StoryPage />
+          } />
           <Route path="/products" element={
             <ProductsPage
               products={mappedProducts}
@@ -339,7 +343,7 @@ function AppContent() {
             <h4 className="uppercase text-xs tracking-widest text-gold mb-6">Visit</h4>
             <p>800 Dry Creek Road Suite B</p>
             <p>Waco, Texas 76705</p>
-            <p>info@homesteadgristmill.com</p>
+            <p>infopush@homesteadgristmill.com</p>
           </div>
         </div>
         <div className="mt-24 text-center font-sans text-cream/20 text-xs">
