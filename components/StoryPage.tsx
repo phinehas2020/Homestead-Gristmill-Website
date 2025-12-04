@@ -65,7 +65,7 @@ const StoryPage: React.FC = () => {
                         viewport={{ once: true }}
                         className="space-y-8"
                     >
-                        <span className="text-gold font-bold text-6xl md:text-8xl font-serif opacity-20 block">1760</span>
+                        <span className="text-gold font-bold text-6xl md:text-8xl font-serif opacity-40 block">1760</span>
                         <h2 className="font-serif text-4xl md:text-5xl text-forest">The Foundation</h2>
                         <p className="font-sans text-lg text-loam/80 leading-relaxed">
                             Built in the Long Valley of western New Jersey, this timber-frame watermill began its life grinding grain for the local community. It was a time when the rhythm of life was dictated by the seasons and the flow of the river.
@@ -118,7 +118,7 @@ const StoryPage: React.FC = () => {
                         viewport={{ once: true }}
                         className="space-y-8 order-1 md:order-2"
                     >
-                        <span className="text-gold font-bold text-6xl md:text-8xl font-serif opacity-20 block">1918</span>
+                        <span className="text-gold font-bold text-6xl md:text-8xl font-serif opacity-40 block">1918</span>
                         <h2 className="font-serif text-4xl md:text-5xl text-cream">The Long Silence</h2>
                         <p className="font-sans text-lg text-cream/80 leading-relaxed">
                             After nearly 160 years of continuous operation, the wheel stopped turning. The mill closed its doors in 1918, falling silent as the world rushed towards industrialization.
@@ -140,7 +140,7 @@ const StoryPage: React.FC = () => {
                         viewport={{ once: true }}
                         className="space-y-8"
                     >
-                        <span className="text-clay font-bold text-6xl md:text-8xl font-serif opacity-20 block">2001</span>
+                        <span className="text-clay font-bold text-6xl md:text-8xl font-serif opacity-40 block">2001</span>
                         <h2 className="font-serif text-4xl md:text-5xl text-forest">A New Home</h2>
                         <p className="font-sans text-lg text-loam/80 leading-relaxed">
                             In 2000, we found the mill. It was dilapidated but its soul was intact. We knew it had to be saved.
