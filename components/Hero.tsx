@@ -8,15 +8,15 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
   const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 500], [0, 200]);
+  const y1 = useTransform(scrollY, [0, 500], [0, 150]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
-    <section id="mill" className="relative h-screen w-full overflow-hidden flex flex-col">
+    <section id="mill" className="relative h-[100dvh] w-full overflow-hidden flex flex-col">
       {/* Background Parallax Layer */}
       <motion.div
         style={{ y: y1 }}
-        className="absolute inset-0 z-0"
+        className="absolute -top-[15%] -bottom-[15%] inset-x-0 z-0"
       >
         {/* The Scrim Gradient - Hard Stop for Zone Defense */}
         <div
@@ -30,14 +30,14 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
         <img
           src="/hero-wheat.png"
           alt="Golden Wheat Macro"
-          className="w-full h-[120%] object-cover object-right md:object-center"
+          className="w-full h-full object-cover object-right md:object-center"
         />
       </motion.div>
 
       {/* Content Layer - Aligned Left in the dark zone */}
       <motion.div
         style={{ opacity }}
-        className="relative z-20 px-6 md:pl-24 md:pr-24 max-w-7xl w-full mx-auto flex flex-col items-start text-left pt-[20vh] md:pt-[25vh]"
+        className="relative z-20 px-6 md:pl-24 md:pr-24 max-w-7xl w-full mx-auto flex flex-col items-start text-left h-full justify-center pb-24 md:pb-0 md:justify-start md:pt-[25vh]"
       >
         {/* Vertical "Est. 1989" Label */}
         <motion.div
