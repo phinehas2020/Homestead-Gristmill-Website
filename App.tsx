@@ -14,11 +14,15 @@ import ProductsPage from './components/ProductsPage';
 import ProductDetail from './components/ProductDetail';
 import Cart from './components/Cart';
 import StoryPage from './components/StoryPage';
+import VisitPage from './components/VisitPage';
+import NotFound from './components/NotFound';
+import FAQ from './components/FAQ';
+import PrivacyPolicy from './components/PrivacyPolicy';
 
 const NAV_ITEMS = [
   { name: 'Our Story', id: 'story', action: 'route', path: '/story' },
   { name: 'Shop Flour', id: 'products', action: 'route', path: '/products' },
-  { name: 'The Mill', id: 'mill', action: 'scroll' }
+  { name: 'Visit', id: 'visit', action: 'route', path: '/visit' }
 ];
 
 function AppContent() {
@@ -321,6 +325,18 @@ function AppContent() {
               onHoverEnd={mouseLeave}
             />
           } />
+          <Route path="/visit" element={
+            <VisitPage />
+          } />
+          <Route path="/faq" element={
+            <FAQ />
+          } />
+          <Route path="/privacy" element={
+            <PrivacyPolicy />
+          } />
+          <Route path="*" element={
+            <NotFound />
+          } />
         </Routes>
       </AnimatePresence>
 
@@ -337,17 +353,19 @@ function AppContent() {
             <h4 className="uppercase text-xs tracking-widest text-gold mb-6">Connect</h4>
             <p className="cursor-pointer hover:text-gold transition-colors">Instagram</p>
             <p className="cursor-pointer hover:text-gold transition-colors">Journal</p>
-            <p className="cursor-pointer hover:text-gold transition-colors">Our Farmers</p>
+            <p className="cursor-pointer hover:text-gold transition-colors" onClick={() => navigate('/faq')}>FAQ</p>
           </div>
           <div className="font-sans text-cream/80 space-y-4">
-            <h4 className="uppercase text-xs tracking-widest text-gold mb-6">Visit</h4>
+            <h4 className="uppercase text-xs tracking-widest text-gold mb-6 cursor-pointer hover:text-white transition-colors" onClick={() => navigate('/visit')}>Visit</h4>
             <p>800 Dry Creek Road Suite B</p>
             <p>Waco, Texas 76705</p>
             <p>infopush@homesteadgristmill.com</p>
           </div>
         </div>
-        <div className="mt-24 text-center font-sans text-cream/20 text-xs">
-          &copy; 2024 Homestead Gristmill. Slow by design.
+        <div className="mt-24 text-center font-sans text-cream/20 text-xs flex flex-col md:flex-row justify-center items-center gap-4">
+          <span>&copy; 2024 Homestead Gristmill. Slow by design.</span>
+          <span className="hidden md:inline">•</span>
+          <span className="cursor-pointer hover:text-cream/40 transition-colors" onClick={() => navigate('/privacy')}>Privacy Policy</span>
         </div>
       </footer>
 
