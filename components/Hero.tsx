@@ -50,7 +50,7 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
       {/* Content Layer - Aligned Left in the dark zone */}
       <motion.div
         style={{ opacity }}
-        className="relative z-20 px-6 md:pl-40 md:pr-24 max-w-7xl w-full mx-auto flex flex-col items-start text-left pt-[20vh] md:pt-[25vh]"
+        className="relative z-20 px-6 md:pl-60 md:pr-24 max-w-7xl w-full mx-auto flex flex-col items-start text-left pt-[20vh] md:pt-[25vh]"
       >
         {/* Mobile only Est label */}
         <motion.span
