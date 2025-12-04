@@ -3,12 +3,12 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, Menu, X } from 'lucide-react';
-import { Product, CursorVariant } from './types';
+import { Product } from './types';
 import { ShopifyProvider, useShopify } from './context/ShopifyContext';
 import { COLLECTION_MAPPINGS, FALLBACK_PANTRY_NAMES } from './lib/collectionConfig';
 
 // Components
-import CustomCursor from './components/CustomCursor';
+
 import Home from './components/Home';
 import ProductsPage from './components/ProductsPage';
 import ProductDetail from './components/ProductDetail';
@@ -26,7 +26,6 @@ const NAV_ITEMS = [
 ];
 
 function AppContent() {
-  const [cursorVariant, setCursorVariant] = useState<CursorVariant>('default');
   const { products: shopifyProducts, collections, cart, isMenuOpen, toggleMenu, closeMenu, openCart, addToCart: shopifyAddToCart } = useShopify();
   const navigate = useNavigate();
   const location = useLocation();
@@ -237,14 +236,11 @@ function AppContent() {
 
   const totalItems = cart?.lineItems?.reduce((acc: number, item: any) => acc + item.quantity, 0) || 0;
 
-  // Handlers for custom cursor
-  const textEnter = () => setCursorVariant('text');
-  const hoverEnter = () => setCursorVariant('hover');
-  const mouseLeave = () => setCursorVariant('default');
+
 
   return (
     <main className="bg-cream min-h-screen w-full overflow-hidden relative">
-      <CustomCursor variant={cursorVariant} isMenuOpen={isMenuOpen} />
+
 
       {/* Navigation */}
       <nav className={`fixed top-0 left-0 w-full z-40 px-6 py-6 flex justify-between items-center transition-colors duration-500 ${location.pathname === '/products' ? 'text-forest' : 'text-cream mix-blend-difference'}`}>
@@ -253,8 +249,7 @@ function AppContent() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 1 }}
           className="font-serif font-bold text-xl tracking-tighter cursor-pointer z-50"
-          onMouseEnter={hoverEnter}
-          onMouseLeave={mouseLeave}
+
           onClick={goHome}
         >
           <img src="/logo.png" alt="Homestead Gristmill Logo" className="h-12 w-auto" />
@@ -266,8 +261,6 @@ function AppContent() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1.1 }}
             onClick={openCart}
-            onMouseEnter={hoverEnter}
-            onMouseLeave={mouseLeave}
             className="relative group"
           >
             <ShoppingBag className="w-6 h-6 stroke-[1.5px]" />
@@ -287,8 +280,6 @@ function AppContent() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1.2 }}
             onClick={toggleMenu}
-            onMouseEnter={hoverEnter}
-            onMouseLeave={mouseLeave}
           >
             <Menu className="w-6 h-6 stroke-[1.5px]" />
           </motion.button>
@@ -302,8 +293,6 @@ function AppContent() {
             <Home
               products={finalPantryProducts}
               addToCart={handleAddToCart}
-              onHoverStart={hoverEnter}
-              onHoverEnd={mouseLeave}
             />
           } />
           <Route path="/story" element={
@@ -313,16 +302,12 @@ function AppContent() {
             <ProductsPage
               products={mappedProducts}
               addToCart={handleAddToCart}
-              onHoverStart={hoverEnter}
-              onHoverEnd={mouseLeave}
             />
           } />
           <Route path="/product/:handle" element={
             <ProductDetail
               products={mappedProducts}
               addToCart={handleAddToCart}
-              onHoverStart={hoverEnter}
-              onHoverEnd={mouseLeave}
             />
           } />
           <Route path="/visit" element={
@@ -370,7 +355,7 @@ function AppContent() {
       </footer>
 
       {/* Cart Sidebar */}
-      <Cart onHoverStart={hoverEnter} onHoverEnd={mouseLeave} />
+      <Cart />
 
       {/* Menu Overlay */}
       <AnimatePresence>
@@ -384,8 +369,6 @@ function AppContent() {
             <button
               onClick={closeMenu}
               className="absolute top-8 right-8 text-cream"
-              onMouseEnter={hoverEnter}
-              onMouseLeave={mouseLeave}
             >
               <X size={32} />
             </button>
@@ -395,9 +378,7 @@ function AppContent() {
                   key={item.name}
                   initial={{ y: 40, opacity: 0 }}
                   whileInView={{ y: 0, opacity: 1 }}
-                  className="font-serif text-5xl md:text-7xl text-cream hover:text-gold transition-colors duration-500 cursor-none pointer-events-auto"
-                  onMouseEnter={textEnter}
-                  onMouseLeave={mouseLeave}
+                  className="font-serif text-5xl md:text-7xl text-cream hover:text-gold transition-colors duration-500 cursor-pointer pointer-events-auto"
                   onClick={() => handleNavClick(item)}
                 >
                   {item.name}

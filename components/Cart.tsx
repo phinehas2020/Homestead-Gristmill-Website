@@ -4,11 +4,10 @@ import { X } from 'lucide-react';
 import { useShopify } from '../context/ShopifyContext';
 
 interface CartProps {
-    onHoverStart: () => void;
-    onHoverEnd: () => void;
+
 }
 
-const Cart: React.FC<CartProps> = ({ onHoverStart, onHoverEnd }) => {
+const Cart: React.FC<CartProps> = () => {
     const { isCartOpen, closeCart, cart, removeLineItem, checkoutUrl } = useShopify();
 
     const subtotal = cart?.subtotalPrice?.amount || 0;
@@ -33,7 +32,7 @@ const Cart: React.FC<CartProps> = ({ onHoverStart, onHoverEnd }) => {
                     >
                         <div className="flex justify-between items-center mb-12">
                             <h2 className="font-serif text-3xl text-forest">Your Sack</h2>
-                            <button onClick={closeCart} onMouseEnter={onHoverStart} onMouseLeave={onHoverEnd}>
+                            <button onClick={closeCart}>
                                 <X className="text-loam" />
                             </button>
                         </div>
@@ -75,8 +74,7 @@ const Cart: React.FC<CartProps> = ({ onHoverStart, onHoverEnd }) => {
                             </div>
                             <a
                                 href={checkoutUrl || '#'}
-                                onMouseEnter={onHoverStart}
-                                onMouseLeave={onHoverEnd}
+
                                 className={`block w-full bg-forest text-cream py-5 rounded-full font-sans uppercase tracking-widest hover:bg-loam transition-colors duration-500 text-center ${!cart?.lineItems?.length ? 'opacity-50 pointer-events-none' : ''}`}
                             >
                                 Checkout

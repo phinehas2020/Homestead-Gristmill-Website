@@ -1,12 +1,9 @@
 import React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
-interface HeroProps {
-  onHoverStart: () => void;
-  onHoverEnd: () => void;
-}
 
-const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
+
+const Hero: React.FC = () => {
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 500], [0, 150]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
@@ -63,8 +60,7 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
 
         <div
           className="font-serif text-6xl md:text-8xl lg:text-[10rem] text-cream mb-8 relative z-50 flex flex-col items-start"
-          onMouseEnter={onHoverStart}
-          onMouseLeave={onHoverEnd}
+
         >
           <motion.span
             initial={{ opacity: 0, x: -40 }}

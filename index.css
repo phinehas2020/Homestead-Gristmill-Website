@@ -11,15 +11,13 @@
     --font-serif: Advecase, Fraunces, serif;
     --font-sans: Outfit, sans-serif;
 
-    --cursor-none: none;
+
 
     --background-image-grain: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%221%22/%3E%3C/svg%3E');
 }
 
 /* Custom Utilities that might not be covered by theme */
-@utility cursor-none {
-    cursor: none;
-}
+
 
 @font-face {
     font-family: 'Advecase';
@@ -57,15 +55,7 @@
 }
 
 /* Hide default cursor when custom one is active */
-body {
-    cursor: none;
-}
 
-a,
-button,
-input {
-    cursor: none;
-}
 
 /* Smooth scrolling settings */
 html {

@@ -7,13 +7,12 @@ import { ShoppingBag, Star } from 'lucide-react';
 interface ShopProps {
   products: Product[];
   addToCart: (product: Product, quantity?: number) => void;
-  onHoverStart: () => void;
-  onHoverEnd: () => void;
+
 }
 
 import { useNavigate } from 'react-router-dom';
 
-const ProductCard: React.FC<{ product: Product; addToCart: (p: Product, quantity?: number) => void; onHoverStart: () => void; onHoverEnd: () => void }> = ({ product, addToCart, onHoverStart, onHoverEnd }) => {
+const ProductCard: React.FC<{ product: Product; addToCart: (p: Product, quantity?: number) => void }> = ({ product, addToCart }) => {
   const navigate = useNavigate();
 
   const handleProductClick = () => {
@@ -38,8 +37,7 @@ const ProductCard: React.FC<{ product: Product; addToCart: (p: Product, quantity
           src={product.image}
           alt={product.name}
           className="w-full h-full object-cover mix-blend-multiply opacity-90 group-hover:scale-105 transition-transform duration-[2000ms] ease-out"
-          onMouseEnter={onHoverStart}
-          onMouseLeave={onHoverEnd}
+
         />
 
         {/* Floating Add Button */}
@@ -49,8 +47,7 @@ const ProductCard: React.FC<{ product: Product; addToCart: (p: Product, quantity
             addToCart(product);
           }}
           className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-forest text-cream px-6 py-3 rounded-full flex items-center gap-2 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out z-20 hover:bg-clay"
-          onMouseEnter={onHoverStart}
-          onMouseLeave={onHoverEnd}
+
         >
           <span className="font-sans text-sm uppercase tracking-wide">Add to Sack</span>
           <ShoppingBag size={16} />
@@ -69,7 +66,7 @@ const ProductCard: React.FC<{ product: Product; addToCart: (p: Product, quantity
   );
 };
 
-const Shop: React.FC<ShopProps> = ({ products, addToCart, onHoverStart, onHoverEnd }) => {
+const Shop: React.FC<ShopProps> = ({ products, addToCart }) => {
   return (
     <section className="bg-bone py-32 px-6 min-h-screen" id="shop">
       <div className="container mx-auto max-w-7xl">
@@ -95,8 +92,7 @@ const Shop: React.FC<ShopProps> = ({ products, addToCart, onHoverStart, onHoverE
               key={product.id}
               product={product}
               addToCart={addToCart}
-              onHoverStart={onHoverStart}
-              onHoverEnd={onHoverEnd}
+
             />
           ))}
         </div>

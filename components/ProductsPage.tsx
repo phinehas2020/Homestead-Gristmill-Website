@@ -7,8 +7,7 @@ import { ShoppingBag, Filter } from 'lucide-react';
 interface ProductsPageProps {
   products: Product[];
   addToCart: (product: Product, quantity?: number) => void;
-  onHoverStart: () => void;
-  onHoverEnd: () => void;
+
 }
 
 const CATEGORIES = [
@@ -21,7 +20,7 @@ const CATEGORIES = [
 
 import { useNavigate } from 'react-router-dom';
 
-const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart, onHoverStart, onHoverEnd }) => {
+const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart }) => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
@@ -92,8 +91,7 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart, onHove
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                onMouseEnter={onHoverStart}
-                onMouseLeave={onHoverEnd}
+
                 className={`font-sans uppercase tracking-widest text-xs md:text-sm transition-all duration-300 pb-1 border-b-2 ${activeCategory === cat.id
                   ? 'text-clay border-clay'
                   : 'text-loam/40 border-transparent hover:text-forest'
@@ -138,8 +136,7 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart, onHove
                         e.stopPropagation();
                         addToCart(product);
                       }}
-                      onMouseEnter={onHoverStart}
-                      onMouseLeave={onHoverEnd}
+
                       className="bg-cream text-forest px-4 py-2 md:px-8 md:py-4 rounded-full font-sans uppercase tracking-widest text-[10px] md:text-xs font-bold hover:bg-gold hover:text-forest transition-colors shadow-xl translate-y-4 group-hover:translate-y-0 transition-transform duration-500"
                     >
                       Add — ${product.price.toFixed(2)}

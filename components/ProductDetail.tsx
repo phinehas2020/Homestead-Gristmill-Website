@@ -8,11 +8,10 @@ import { ShoppingBag, ArrowLeft, Wheat, Minus, Plus } from 'lucide-react';
 interface ProductDetailProps {
     products: Product[];
     addToCart: (product: Product, quantity?: number) => void;
-    onHoverStart: () => void;
-    onHoverEnd: () => void;
+
 }
 
-const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart, onHoverStart, onHoverEnd }) => {
+const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) => {
     const { handle } = useParams<{ handle: string }>();
     const navigate = useNavigate();
     const [product, setProduct] = useState<Product | null>(null);
@@ -46,8 +45,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart, onHo
             {/* Back Button */}
             <button
                 onClick={() => navigate(-1)}
-                onMouseEnter={onHoverStart}
-                onMouseLeave={onHoverEnd}
+
                 className="absolute top-32 left-6 md:left-12 flex items-center gap-2 text-forest/60 hover:text-forest transition-colors font-sans uppercase tracking-widest text-xs z-10"
             >
                 <ArrowLeft size={16} />
@@ -108,8 +106,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart, onHo
                                 <button
                                     onClick={decrement}
                                     className="text-forest/40 hover:text-forest transition-colors"
-                                    onMouseEnter={onHoverStart}
-                                    onMouseLeave={onHoverEnd}
+
                                 >
                                     <Minus size={18} />
                                 </button>
@@ -117,8 +114,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart, onHo
                                 <button
                                     onClick={increment}
                                     className="text-forest/40 hover:text-forest transition-colors"
-                                    onMouseEnter={onHoverStart}
-                                    onMouseLeave={onHoverEnd}
+
                                 >
                                     <Plus size={18} />
                                 </button>
@@ -126,8 +122,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart, onHo
 
                             <button
                                 onClick={() => addToCart(product, quantity)}
-                                onMouseEnter={onHoverStart}
-                                onMouseLeave={onHoverEnd}
+
                                 className="flex-1 bg-forest text-cream px-12 py-5 rounded-full font-sans uppercase tracking-widest text-sm font-bold hover:bg-clay transition-colors shadow-xl flex items-center justify-center gap-3 group"
                             >
                                 Add to Sack
