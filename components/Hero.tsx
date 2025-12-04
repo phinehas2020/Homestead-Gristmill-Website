@@ -37,14 +37,14 @@ const Hero: React.FC<HeroProps> = ({ onHoverStart, onHoverEnd }) => {
       {/* Content Layer - Aligned Left in the dark zone */}
       <motion.div
         style={{ opacity }}
-        className="relative z-20 px-6 md:pl-60 md:pr-24 max-w-7xl w-full mx-auto flex flex-col items-start text-left pt-[20vh] md:pt-[25vh]"
+        className="relative z-20 px-6 md:pl-24 md:pr-24 max-w-7xl w-full mx-auto flex flex-col items-start text-left pt-[20vh] md:pt-[25vh]"
       >
         {/* Vertical "Est. 1989" Label */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1.5, delay: 0.5 }}
-          className="hidden md:block absolute -left-10 lg:-left-12 top-1/2 -translate-y-1/2 z-30"
+          className="hidden md:block absolute -left-12 lg:-left-16 top-1/2 -translate-y-1/2 z-30"
         >
           <span className="block text-gold font-sans uppercase tracking-[0.3em] text-xs -rotate-90 whitespace-nowrap origin-center">
             Est. 1989 &mdash; Central Texas

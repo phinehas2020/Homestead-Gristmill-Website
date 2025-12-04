@@ -22,7 +22,7 @@ const StoryPage: React.FC = () => {
                     className="absolute inset-0 z-0"
                 >
                     {/* Placeholder for a historical map or mill image */}
-                    <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1506976785307-8732e854ad03?q=80&w=2574&auto=format&fit=crop')] bg-cover bg-center opacity-20 grayscale" />
+                    <div className="w-full h-full bg-[url('/story/hero-background.png')] bg-cover bg-center opacity-20 grayscale" />
                 </motion.div>
 
                 <div className="relative z-10 text-center max-w-4xl mx-auto space-y-8">
@@ -82,7 +82,7 @@ const StoryPage: React.FC = () => {
                         className="relative h-[600px] bg-bone rounded-t-[200px] overflow-hidden"
                     >
                         <img
-                            src="https://images.unsplash.com/photo-1543431604-582c6d9a941e?q=80&w=2574&auto=format&fit=crop"
+                            src="/story/chapter1-timber.png"
                             alt="Old timber frame structure"
                             className="w-full h-full object-cover sepia-[0.5] hover:sepia-0 transition-all duration-1000"
                         />
@@ -105,7 +105,7 @@ const StoryPage: React.FC = () => {
                         <div className="absolute inset-0 border-2 border-gold/30 rounded-full animate-[spin_60s_linear_infinite]" />
                         <div className="absolute inset-4 border border-gold/20 rounded-full animate-[spin_40s_linear_infinite_reverse]" />
                         <img
-                            src="https://images.unsplash.com/photo-1516937941348-c09645f31e88?q=80&w=2574&auto=format&fit=crop"
+                            src="/story/chapter2-machinery.png"
                             alt="Abandoned machinery"
                             className="absolute inset-12 w-[calc(100%-6rem)] h-[calc(100%-6rem)] object-cover rounded-full grayscale contrast-125"
                         />
@@ -160,12 +160,12 @@ const StoryPage: React.FC = () => {
                         className="grid grid-cols-2 gap-4"
                     >
                         <img
-                            src="https://images.unsplash.com/photo-1621857053538-466205777d91?q=80&w=2670&auto=format&fit=crop"
+                            src="/story/chapter3-construction.png"
                             alt="Construction detail"
                             className="w-full h-64 object-cover rounded-tl-[80px]"
                         />
                         <img
-                            src="https://images.unsplash.com/photo-1589396575653-c05902586019?q=80&w=2670&auto=format&fit=crop"
+                            src="/story/chapter3-wheat.png"
                             alt="Wheat field"
                             className="w-full h-64 object-cover rounded-br-[80px] mt-12"
                         />
