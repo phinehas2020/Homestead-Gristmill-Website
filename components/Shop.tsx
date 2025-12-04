@@ -52,7 +52,7 @@ const ProductCard: React.FC<{ product: Product; addToCart: (p: Product, quantity
           onMouseEnter={onHoverStart}
           onMouseLeave={onHoverEnd}
         >
-          <span className="font-sans text-sm uppercase tracking-wide">Add to Cart</span>
+          <span className="font-sans text-sm uppercase tracking-wide">Add to Sack</span>
           <ShoppingBag size={16} />
         </button>
       </div>
