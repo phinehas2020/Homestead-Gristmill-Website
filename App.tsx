@@ -135,6 +135,11 @@ function AppContent() {
       weight: p.variants?.[0]?.title || 'Standard',
       category,
       variantId: p.variants?.[0]?.id,
+      variants: p.variants?.map((v: any) => ({
+        id: v.id,
+        title: v.title,
+        price: parseFloat(v.price?.amount || '0')
+      })) || [],
       handle: p.handle
     };
   }, [collectionProductLookup, normalizeCategoryKey]);

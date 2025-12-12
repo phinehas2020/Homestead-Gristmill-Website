@@ -15,12 +15,18 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
     const { handle } = useParams<{ handle: string }>();
     const navigate = useNavigate();
     const [product, setProduct] = useState<Product | null>(null);
+    const [activeVariant, setActiveVariant] = useState<{ id: string; title: string; price: number } | null>(null);
     const [quantity, setQuantity] = useState(1);
 
     useEffect(() => {
         if (products.length > 0 && handle) {
             const found = products.find(p => p.handle === handle);
-            if (found) setProduct(found);
+            if (found) {
+                setProduct(found);
+                if (found.variants && found.variants.length > 0) {
+                    setActiveVariant(found.variants[0]);
+                }
+            }
         }
     }, [products, handle]);
 
@@ -91,7 +97,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
                         </h1>
 
                         <p className="font-sans text-xl text-clay mb-8 font-medium">
-                            ${product.price.toFixed(2)} <span className="text-loam/40 text-sm font-normal ml-2">/ {product.weight}</span>
+                            ${(activeVariant?.price || product.price).toFixed(2)} <span className="text-loam/40 text-sm font-normal ml-2">/ {activeVariant?.title || product.weight}</span>
                         </p>
 
                         <div className="h-px w-full bg-forest/10 mb-8" />
@@ -99,6 +105,24 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
                         <p className="font-sans text-loam/80 text-lg leading-relaxed mb-12 max-w-lg">
                             {product.description}
                         </p>
+
+                        {/* Variant Selector */}
+                        {product.variants && product.variants.length > 1 && (
+                            <div className="flex flex-wrap gap-3 mb-8">
+                                {product.variants.map((variant) => (
+                                    <button
+                                        key={variant.id}
+                                        onClick={() => setActiveVariant(variant)}
+                                        className={`px-4 py-2 rounded-full border transition-all duration-300 font-sans text-xs uppercase tracking-widest ${activeVariant?.id === variant.id
+                                            ? 'bg-forest text-cream border-forest'
+                                            : 'bg-transparent text-forest/60 border-forest/20 hover:border-forest hover:text-forest'
+                                            }`}
+                                    >
+                                        {variant.title}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
 
                         <div className="flex flex-col sm:flex-row gap-6 items-stretch sm:items-center">
                             {/* Quantity Selector */}
@@ -121,7 +145,16 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
                             </div>
 
                             <button
-                                onClick={() => addToCart(product, quantity)}
+                                onClick={() => {
+                                    if (product && activeVariant) {
+                                        addToCart({
+                                            ...product,
+                                            variantId: activeVariant.id,
+                                            price: activeVariant.price,
+                                            weight: activeVariant.title
+                                        }, quantity);
+                                    }
+                                }}
 
                                 className="flex-1 bg-forest text-cream px-12 py-5 rounded-full font-sans uppercase tracking-widest text-sm font-bold hover:bg-clay transition-colors shadow-xl flex items-center justify-center gap-3 group"
                             >

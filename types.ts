@@ -8,6 +8,11 @@ export interface Product {
     weight: string;
     category: 'wheat' | 'rye' | 'corn' | 'goods' | string;
     variantId?: string;
+    variants?: {
+        id: string;
+        title: string;
+        price: number;
+    }[];
     handle: string;
 }
 
