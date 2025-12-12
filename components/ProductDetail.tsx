@@ -15,7 +15,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
     const { handle } = useParams<{ handle: string }>();
     const navigate = useNavigate();
     const [product, setProduct] = useState<Product | null>(null);
-    const [activeVariant, setActiveVariant] = useState<{ id: string; title: string; price: number } | null>(null);
+    const [activeVariant, setActiveVariant] = useState<{ id: string; title: string; price: number; image?: string } | null>(null);
     const [quantity, setQuantity] = useState(1);
 
     useEffect(() => {
@@ -69,7 +69,8 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
                 >
                     <div className="absolute inset-0 bg-forest/5 mix-blend-multiply pointer-events-none" />
                     <img
-                        src={product.image}
+                        key={activeVariant?.image || product.image}
+                        src={activeVariant?.image || product.image}
                         alt={product.name}
                         className="w-full h-full object-cover mix-blend-multiply contrast-110"
                     />

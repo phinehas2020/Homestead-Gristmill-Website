@@ -138,7 +138,8 @@ function AppContent() {
       variants: p.variants?.map((v: any) => ({
         id: v.id,
         title: v.title,
-        price: parseFloat(v.price?.amount || '0')
+        price: parseFloat(v.price?.amount || '0'),
+        image: v.image?.src
       })) || [],
       handle: p.handle
     };
