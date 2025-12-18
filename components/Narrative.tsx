@@ -26,7 +26,7 @@ const Narrative: React.FC = () => {
             >
               {/* Sterile, cold, industrial image */}
               <img
-                src="/industrial-flour.png"
+                src="/industrial-flour-v2.png"
                 alt="Sterile industrial environment"
                 className="w-full h-[600px] object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-[2000ms] ease-out rounded-[40px_10px_50px_20px]"
               />
