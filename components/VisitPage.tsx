@@ -75,19 +75,6 @@ const VisitPage: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="space-y-6">
-                            <h2 className="font-serif text-4xl text-forest">Contact</h2>
-                            <div className="font-sans text-lg text-loam/80 leading-relaxed space-y-2">
-                                <p>
-                                    <span className="font-bold text-forest/60 text-sm uppercase tracking-wider block mb-1">Email</span>
-                                    <a href="mailto:infopush@homesteadgristmill.com" className="hover:text-clay transition-colors">infopush@homesteadgristmill.com</a>
-                                </p>
-                                <p>
-                                    <span className="font-bold text-forest/60 text-sm uppercase tracking-wider block mb-1 mt-4">Phone</span>
-                                    <a href="tel:+12547549600" className="hover:text-clay transition-colors">(254) 754-9600</a>
-                                </p>
-                            </div>
-                        </div>
                     </motion.div>
 
                     <motion.div

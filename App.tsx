@@ -18,6 +18,7 @@ import VisitPage from './components/VisitPage';
 import NotFound from './components/NotFound';
 import FAQ from './components/FAQ';
 import PrivacyPolicy from './components/PrivacyPolicy';
+import TermsOfService from './components/TermsOfService';
 
 const NAV_ITEMS = [
   { name: 'Our Story', id: 'story', action: 'route', path: '/story' },
@@ -325,6 +326,9 @@ function AppContent() {
           <Route path="/privacy" element={
             <PrivacyPolicy />
           } />
+          <Route path="/terms" element={
+            <TermsOfService />
+          } />
           <Route path="*" element={
             <NotFound />
           } />
@@ -342,21 +346,40 @@ function AppContent() {
           </div>
           <div className="font-sans text-cream/80 space-y-4">
             <h4 className="uppercase text-xs tracking-widest text-gold mb-6">Connect</h4>
-            <p className="cursor-pointer hover:text-gold transition-colors">Instagram</p>
-            <p className="cursor-pointer hover:text-gold transition-colors">Journal</p>
+            <a href="https://instagram.com/homesteadgristmill" target="_blank" rel="noopener noreferrer" className="block cursor-pointer hover:text-gold transition-colors">Instagram</a>
+            <a href="https://www.homesteadheritagetexas.com/blog/" target="_blank" rel="noopener noreferrer" className="block cursor-pointer hover:text-gold transition-colors">Journal</a>
             <p className="cursor-pointer hover:text-gold transition-colors" onClick={() => navigate('/faq')}>FAQ</p>
           </div>
           <div className="font-sans text-cream/80 space-y-4">
             <h4 className="uppercase text-xs tracking-widest text-gold mb-6 cursor-pointer hover:text-white transition-colors" onClick={() => navigate('/visit')}>Visit</h4>
-            <p>800 Dry Creek Road Suite B</p>
-            <p>Waco, Texas 76705</p>
-            <p>infopush@homesteadgristmill.com</p>
+            <p className="text-sm">800 Dry Creek Road Suite B</p>
+            <p className="text-sm">Waco, Texas 76705</p>
+
+            <div className="pt-4">
+              <h5 className="text-[10px] uppercase tracking-[0.2em] text-cream/40 mb-3">Newsletter</h5>
+              <form
+                className="flex gap-2"
+                onSubmit={(e) => { e.preventDefault(); alert("Subscribed! Check your email to confirm."); }}
+              >
+                <input
+                  type="email"
+                  placeholder="Your email"
+                  required
+                  className="bg-cream/5 border border-cream/10 rounded-lg px-3 py-2 text-xs w-full focus:outline-none focus:border-gold transition-colors"
+                />
+                <button type="submit" className="bg-clay text-cream px-4 py-2 rounded-lg text-[10px] uppercase tracking-widest font-bold hover:bg-gold hover:text-forest transition-colors">
+                  Join
+                </button>
+              </form>
+            </div>
           </div>
         </div>
         <div className="mt-24 text-center font-sans text-cream/20 text-xs flex flex-col md:flex-row justify-center items-center gap-4">
           <span>&copy; 2024 Homestead Gristmill. Slow by design.</span>
           <span className="hidden md:inline">•</span>
           <span className="cursor-pointer hover:text-cream/40 transition-colors" onClick={() => navigate('/privacy')}>Privacy Policy</span>
+          <span className="hidden md:inline">•</span>
+          <span className="cursor-pointer hover:text-cream/40 transition-colors" onClick={() => navigate('/terms')}>Terms of Service</span>
         </div>
       </footer>
 
