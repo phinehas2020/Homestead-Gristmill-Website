@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, Menu, X } from 'lucide-react';
+import { ShoppingBag, Menu, X, User } from 'lucide-react';
 import { Product } from './types';
 import { ShopifyProvider, useShopify } from './context/ShopifyContext';
 import { COLLECTION_MAPPINGS, FALLBACK_PANTRY_NAMES } from './lib/collectionConfig';
@@ -281,6 +281,18 @@ function AppContent() {
               </motion.span>
             )}
           </motion.button>
+
+          <motion.a
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 1.15 }}
+            href="https://homesteadgristmill.com/account"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative group"
+          >
+            <User className="w-6 h-6 stroke-[1.5px]" />
+          </motion.a>
 
           <motion.button
             initial={{ opacity: 0, y: -20 }}
