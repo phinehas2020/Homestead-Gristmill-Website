@@ -25,8 +25,8 @@ const Hero: React.FC = () => {
 
         {/* Hero Image - Lifestyle Table Setting */}
         <img
-          src="/hero-lifestyle.png"
-          alt="Homestead Gristmill Family Table"
+          src="/hero-holiday.png"
+          alt="Homestead Gristmill holiday Table"
           className="w-full h-full object-cover object-[65%_center] md:object-center"
         />
       </motion.div>
