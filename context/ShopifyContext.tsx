@@ -32,36 +32,39 @@ interface ShopifyProviderProps {
     children: ReactNode;
 }
 
+const CACHE_KEY = 'gristmill_shopify_cache';
+const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
+
 export const ShopifyProvider: React.FC<ShopifyProviderProps> = ({ children }) => {
-    const [products, setProducts] = useState<any[]>([]);
-    const [collections, setCollections] = useState<any[]>([]);
+    // Initialize state from cache to prevent flicker on first render
+    const [products, setProducts] = useState<any[]>(() => {
+        try {
+            const cached = localStorage.getItem(CACHE_KEY);
+            if (cached) {
+                const { products: cachedProducts, timestamp } = JSON.parse(cached);
+                if (Date.now() - timestamp < CACHE_TTL) return cachedProducts;
+            }
+        } catch (e) { console.error("Cache load failed", e); }
+        return [];
+    });
+
+    const [collections, setCollections] = useState<any[]>(() => {
+        try {
+            const cached = localStorage.getItem(CACHE_KEY);
+            if (cached) {
+                const { collections: cachedCollections, timestamp } = JSON.parse(cached);
+                if (Date.now() - timestamp < CACHE_TTL) return cachedCollections;
+            }
+        } catch (e) { console.error("Cache load failed", e); }
+        return [];
+    });
+
     const [cart, setCart] = useState<any>(null);
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     useEffect(() => {
-        const CACHE_KEY = 'gristmill_shopify_cache';
-        const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
-
-        const loadCache = () => {
-            try {
-                const cached = localStorage.getItem(CACHE_KEY);
-                if (cached) {
-                    const { products: cachedProducts, collections: cachedCollections, timestamp } = JSON.parse(cached);
-                    // Only use cache if it's not too old
-                    if (Date.now() - timestamp < CACHE_TTL) {
-                        console.log("Loading Shopify data from cache...");
-                        setProducts(cachedProducts);
-                        setCollections(cachedCollections);
-                        return true;
-                    }
-                }
-            } catch (e) {
-                console.error("Failed to load cache:", e);
-            }
-            return false;
-        };
-
+        // Just refresh the data in the background now, since we initialized from cache
         const fetchData = async () => {
             try {
                 console.log("Fetching fresh data from Shopify...");
@@ -84,7 +87,6 @@ export const ShopifyProvider: React.FC<ShopifyProviderProps> = ({ children }) =>
             }
         };
 
-        const hasCache = loadCache();
         fetchData(); // Always fetch fresh to keep data in sync
 
         // Initialize cart

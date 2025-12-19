@@ -23,11 +23,11 @@ const Hero: React.FC = () => {
           }}
         />
 
-        {/* Hero Image - Wheat Macro */}
+        {/* Hero Image - Artisanal Milled Product */}
         <img
-          src="/hero-wheat.png"
-          alt="Golden Wheat Macro"
-          className="w-full h-full object-cover object-right md:object-center"
+          src="/hero-product.png"
+          alt="Artisanal Stone-Ground Flour"
+          className="w-full h-full object-cover object-center"
         />
       </motion.div>
 
