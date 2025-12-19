@@ -110,6 +110,19 @@ function AppContent() {
     return lookup;
   }, [collections, normalizeCategoryKey, extractCollectionProducts, collectionIdsByCategory]);
 
+  // Helper to get optimized Shopify image URLs
+  const getOptimizedImage = useCallback((url: string, width = 800) => {
+    if (!url) return 'https://picsum.photos/seed/flour/600/800';
+    if (!url.includes('cdn.shopify.com')) return url;
+
+    // Use Shopify URL params for optimization
+    // width: specific width
+    // format: webp (modern format)
+    // crop: center (optional)
+    const separator = url.includes('?') ? '&' : '?';
+    return `${url}${separator}width=${width}&format=webp`;
+  }, []);
+
   // Helper to map Shopify products to internal Product type
   const mapProduct = useCallback((p: any): Product => {
     const productId = p.id?.toString?.() || '';
@@ -127,12 +140,14 @@ function AppContent() {
     else if (isCorn) category = 'corn';
     else if (isRye) category = 'rye';
 
+    const mainImageUrl = p.images?.[0]?.src || '';
+
     return {
       id: p.id,
       name: p.title,
       description: p.description || '',
       price: parseFloat(p.variants?.[0]?.price?.amount || '0'),
-      image: p.images?.[0]?.src || 'https://picsum.photos/seed/flour/600/800',
+      image: getOptimizedImage(mainImageUrl, 800),
       weight: p.variants?.[0]?.title || 'Standard',
       category,
       variantId: p.variants?.[0]?.id,
@@ -140,11 +155,11 @@ function AppContent() {
         id: v.id,
         title: v.title,
         price: parseFloat(v.price?.amount || '0'),
-        image: v.image?.src
+        image: getOptimizedImage(v.image?.src || mainImageUrl, 600)
       })) || [],
       handle: p.handle
     };
-  }, [collectionProductLookup, normalizeCategoryKey]);
+  }, [collectionProductLookup, normalizeCategoryKey, getOptimizedImage]);
 
   // Map all products (re-compute when we have collections so categories can use collection membership)
   const mappedProducts: Product[] = useMemo(() => shopifyProducts.map(mapProduct), [shopifyProducts, mapProduct]);

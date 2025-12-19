@@ -40,33 +40,64 @@ export const ShopifyProvider: React.FC<ShopifyProviderProps> = ({ children }) =>
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     useEffect(() => {
-        // Fetch all products and collections (with their products) together
+        const CACHE_KEY = 'gristmill_shopify_cache';
+        const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
+
+        const loadCache = () => {
+            try {
+                const cached = localStorage.getItem(CACHE_KEY);
+                if (cached) {
+                    const { products: cachedProducts, collections: cachedCollections, timestamp } = JSON.parse(cached);
+                    // Only use cache if it's not too old
+                    if (Date.now() - timestamp < CACHE_TTL) {
+                        console.log("Loading Shopify data from cache...");
+                        setProducts(cachedProducts);
+                        setCollections(cachedCollections);
+                        return true;
+                    }
+                }
+            } catch (e) {
+                console.error("Failed to load cache:", e);
+            }
+            return false;
+        };
+
         const fetchData = async () => {
             try {
-                console.log("Fetching products and collections from Shopify...");
-                // Fetch enough records so we don't miss collections like Pantry/Goods or products beyond the first page
+                console.log("Fetching fresh data from Shopify...");
                 const [allProducts, allCollectionsWithProducts] = await Promise.all([
                     client.product.fetchAll(250),
                     client.collection.fetchAllWithProducts({ first: 250, productsFirst: 250 }),
                 ]);
 
-                console.log("Fetched products:", allProducts);
-                console.log("Fetched collections with products:", allCollectionsWithProducts);
-
                 setProducts(allProducts);
                 setCollections(allCollectionsWithProducts);
+
+                // Update cache
+                localStorage.setItem(CACHE_KEY, JSON.stringify({
+                    products: allProducts,
+                    collections: allCollectionsWithProducts,
+                    timestamp: Date.now()
+                }));
             } catch (err) {
                 console.error("Failed to fetch Shopify data:", err);
             }
         };
 
-        fetchData();
+        const hasCache = loadCache();
+        fetchData(); // Always fetch fresh to keep data in sync
 
         // Initialize cart
         const checkoutId = localStorage.getItem('checkout_id');
         if (checkoutId) {
             client.checkout.fetch(checkoutId).then((checkout) => {
                 setCart(checkout);
+            }).catch(() => {
+                // If fetch fails (rare), create fresh
+                client.checkout.create().then((checkout) => {
+                    localStorage.setItem('checkout_id', checkout.id as string);
+                    setCart(checkout);
+                });
             });
         } else {
             client.checkout.create().then((checkout) => {
