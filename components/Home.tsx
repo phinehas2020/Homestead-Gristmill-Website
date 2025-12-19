@@ -20,7 +20,7 @@ const Home: React.FC<HomeProps> = ({ products, addToCart }) => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
         >
-            <Hero />
+            <Hero products={products} addToCart={addToCart} />
 
             <Shop
                 products={products}
