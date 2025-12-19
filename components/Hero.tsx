@@ -15,19 +15,19 @@ const Hero: React.FC = () => {
         style={{ y: y1 }}
         className="absolute -top-[15%] -bottom-[15%] inset-x-0 z-0"
       >
-        {/* The Scrim Gradient - Hard Stop for Zone Defense */}
+        {/* The Scrim Gradient - Deepened for the new lifestyle imagery */}
         <div
           className="absolute inset-0 z-10"
           style={{
-            background: 'linear-gradient(to right, #1A3A2A 0%, rgba(26, 58, 42, 0.95) 30%, rgba(26, 58, 42, 0) 70%)'
+            background: 'linear-gradient(to right, #1A3A2A 0%, rgba(26, 58, 42, 0.9) 35%, rgba(26, 58, 42, 0) 80%)'
           }}
         />
 
-        {/* Hero Image - Wheat Macro */}
+        {/* Hero Image - Lifestyle Table Setting */}
         <img
-          src="/hero-wheat.png"
-          alt="Golden Wheat Macro"
-          className="w-full h-full object-cover object-right md:object-center"
+          src="/hero-lifestyle.png"
+          alt="Homestead Gristmill Family Table"
+          className="w-full h-full object-cover object-[65%_center] md:object-center"
         />
       </motion.div>
 
