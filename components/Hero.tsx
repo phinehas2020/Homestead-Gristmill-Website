@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 
 const Hero: React.FC = () => {
   const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 500], [0, 150]);
+  const y1 = useTransform(scrollY, [0, 500], [0, 100]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
@@ -13,7 +13,7 @@ const Hero: React.FC = () => {
       {/* Background Parallax Layer */}
       <motion.div
         style={{ y: y1 }}
-        className="absolute -top-[15%] -bottom-[15%] inset-x-0 z-0"
+        className="absolute -top-[10%] -bottom-[10%] inset-x-0 z-0"
       >
         {/* The Scrim Gradient - Deepened for the new lifestyle imagery */}
         <div
