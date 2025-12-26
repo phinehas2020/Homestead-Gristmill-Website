@@ -1,37 +1,204 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Product } from '../types';
-import { ShoppingBag, Filter } from 'lucide-react';
+import { ShoppingBag, Search, X, Plus, Minus, Check, SlidersHorizontal } from 'lucide-react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 interface ProductsPageProps {
   products: Product[];
   addToCart: (product: Product, quantity?: number) => void;
-
 }
 
 const CATEGORIES = [
-  { id: 'all', label: 'All Harvest' },
+  { id: 'all', label: 'All Products' },
   { id: 'wheat', label: 'Heritage Wheat' },
   { id: 'corn', label: 'Corn & Grits' },
   { id: 'rye', label: 'Rye' },
   { id: 'goods', label: 'Dry Goods' },
 ];
 
-import { useNavigate } from 'react-router-dom';
+const SORT_OPTIONS = [
+  { id: 'featured', label: 'Featured' },
+  { id: 'price-asc', label: 'Price: Low to High' },
+  { id: 'price-desc', label: 'Price: High to Low' },
+  { id: 'name-asc', label: 'Name: A-Z' },
+];
+
+// Product Card Component
+const ProductCard: React.FC<{
+  product: Product;
+  addToCart: (p: Product, quantity?: number) => void;
+  index: number;
+}> = ({ product, addToCart, index }) => {
+  const navigate = useNavigate();
+  const [quantity, setQuantity] = useState(1);
+  const [isAdding, setIsAdding] = useState(false);
+  const [justAdded, setJustAdded] = useState(false);
+
+  const handleProductClick = () => {
+    navigate(`/product/${product.handle}`);
+  };
+
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsAdding(true);
+    await addToCart(product, quantity);
+    setIsAdding(false);
+    setJustAdded(true);
+    setTimeout(() => {
+      setJustAdded(false);
+      setQuantity(1);
+    }, 2000);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+      className="group relative flex flex-col bg-cream rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300"
+    >
+      {/* Image Container */}
+      <div
+        onClick={handleProductClick}
+        className="relative w-full aspect-square overflow-hidden bg-bone cursor-pointer"
+      >
+        {/* Category Badge */}
+        <div className="absolute top-3 left-3 z-20">
+          <span className="bg-forest/90 text-cream px-2.5 py-1 rounded-full font-sans text-[9px] uppercase tracking-widest backdrop-blur-sm">
+            {product.category === 'wheat' ? 'Wheat' :
+             product.category === 'corn' ? 'Corn' :
+             product.category === 'rye' ? 'Rye' : 'Goods'}
+          </span>
+        </div>
+
+        <img
+          src={product.image}
+          alt={product.name}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+        />
+
+        {/* Quick View Overlay */}
+        <div className="absolute inset-0 bg-forest/0 group-hover:bg-forest/10 transition-colors duration-300 flex items-center justify-center">
+          <span className="bg-cream/95 text-forest px-4 py-2 rounded-full font-sans text-[10px] uppercase tracking-widest shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            View Details
+          </span>
+        </div>
+      </div>
+
+      {/* Product Info */}
+      <div className="p-4 md:p-5 flex flex-col flex-grow">
+        <div className="flex-grow mb-3">
+          <h3
+            onClick={handleProductClick}
+            className="font-serif text-lg md:text-xl text-forest mb-1 cursor-pointer hover:text-clay transition-colors leading-tight line-clamp-2"
+          >
+            {product.name}
+          </h3>
+          <p className="font-sans text-loam/50 text-xs">{product.weight}</p>
+        </div>
+
+        {/* Price & Quantity Row */}
+        <div className="flex items-center justify-between mb-3">
+          <p className="font-serif text-xl text-clay">${product.price.toFixed(2)}</p>
+
+          {/* Compact Quantity Selector */}
+          <div className="flex items-center gap-0.5 bg-bone rounded-full p-0.5">
+            <button
+              onClick={(e) => { e.stopPropagation(); setQuantity(Math.max(1, quantity - 1)); }}
+              className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-cream transition-colors"
+              disabled={quantity <= 1}
+            >
+              <Minus size={12} className={quantity <= 1 ? 'text-loam/30' : 'text-forest'} />
+            </button>
+            <span className="w-6 text-center font-sans text-xs text-forest">{quantity}</span>
+            <button
+              onClick={(e) => { e.stopPropagation(); setQuantity(quantity + 1); }}
+              className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-cream transition-colors"
+            >
+              <Plus size={12} className="text-forest" />
+            </button>
+          </div>
+        </div>
+
+        {/* Add to Cart Button */}
+        <button
+          onClick={handleAddToCart}
+          disabled={isAdding || justAdded}
+          className={`w-full py-3 rounded-full font-sans uppercase tracking-widest text-[10px] md:text-xs flex items-center justify-center gap-2 transition-all duration-300 ${
+            justAdded
+              ? 'bg-green-600 text-cream'
+              : 'bg-forest text-cream hover:bg-clay'
+          }`}
+        >
+          {justAdded ? (
+            <>
+              <Check size={14} />
+              Added
+            </>
+          ) : isAdding ? (
+            <span className="animate-pulse">Adding...</span>
+          ) : (
+            <>
+              <ShoppingBag size={14} />
+              Add to Sack
+            </>
+          )}
+        </button>
+      </div>
+    </motion.div>
+  );
+};
 
 const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart }) => {
-  const [activeCategory, setActiveCategory] = useState('all');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeCategory, setActiveCategory] = useState(searchParams.get('category') || 'all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState('featured');
+  const [showFilters, setShowFilters] = useState(false);
   const navigate = useNavigate();
 
+  // Sync category from URL params
+  useEffect(() => {
+    const categoryParam = searchParams.get('category');
+    if (categoryParam && CATEGORIES.find(c => c.id === categoryParam)) {
+      setActiveCategory(categoryParam);
+    }
+  }, [searchParams]);
+
+  // Update URL when category changes
+  const handleCategoryChange = (categoryId: string) => {
+    setActiveCategory(categoryId);
+    if (categoryId === 'all') {
+      searchParams.delete('category');
+    } else {
+      searchParams.set('category', categoryId);
+    }
+    setSearchParams(searchParams);
+  };
+
+  // Get counts per category
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = { all: products.length };
+    CATEGORIES.forEach(cat => {
+      if (cat.id !== 'all') {
+        counts[cat.id] = products.filter(p => p.category === cat.id).length;
+      }
+    });
+    return counts;
+  }, [products]);
+
+  // Filter and sort products
   const filteredProducts = useMemo(() => {
     let filtered = products;
 
+    // Category filter
     if (activeCategory !== 'all') {
       filtered = filtered.filter(p => p.category === activeCategory);
     }
 
+    // Search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(p =>
@@ -40,130 +207,210 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart }) => {
       );
     }
 
+    // Sort
+    switch (sortBy) {
+      case 'price-asc':
+        filtered = [...filtered].sort((a, b) => a.price - b.price);
+        break;
+      case 'price-desc':
+        filtered = [...filtered].sort((a, b) => b.price - a.price);
+        break;
+      case 'name-asc':
+        filtered = [...filtered].sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      default:
+        // Featured - keep original order
+        break;
+    }
+
     return filtered;
-  }, [products, activeCategory, searchQuery]);
+  }, [products, activeCategory, searchQuery, sortBy]);
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.8 }}
-      className="bg-bone min-h-screen pt-24 pb-24 px-4 md:px-6"
+      transition={{ duration: 0.5 }}
+      className="bg-bone min-h-screen pb-24"
     >
-      <div className="container mx-auto max-w-7xl">
+      {/* Hero Header - Full bleed from top */}
+      <div className="bg-forest text-cream pt-32 md:pt-36 pb-12 md:pb-16 px-6 mb-8">
+        <div className="container mx-auto max-w-7xl">
+          <motion.h1
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.1, duration: 0.6 }}
+            className="font-serif text-4xl md:text-6xl lg:text-7xl mb-4"
+          >
+            Shop All Flour
+          </motion.h1>
+          <motion.p
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            className="font-sans text-cream/70 text-lg md:text-xl max-w-xl"
+          >
+            Stone-ground heritage grains, milled fresh weekly in Central Texas.
+          </motion.p>
+        </div>
+      </div>
 
-        {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-24 border-b border-forest/10 pb-8 md:pb-12">
-          <div className="max-w-2xl w-full">
-            <motion.h1
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2, duration: 1 }}
-              className="font-serif text-5xl md:text-8xl text-forest mb-4 md:mb-6"
-            >
-              The Catalog
-            </motion.h1>
-            <motion.p
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.4, duration: 1 }}
-              className="font-sans text-loam/80 text-base md:text-lg max-w-lg leading-relaxed mb-8"
-            >
-              Our full selection of stone-ground grains. Milled fresh to order in Central Texas.
-            </motion.p>
+      <div className="container mx-auto max-w-7xl px-4 md:px-6">
+        {/* Filter Bar */}
+        <div className="sticky top-20 z-30 bg-bone/95 backdrop-blur-md py-4 -mx-4 px-4 md:-mx-6 md:px-6 mb-8 border-b border-forest/10">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            {/* Category Tabs - Desktop */}
+            <div className="hidden md:flex items-center gap-2">
+              {CATEGORIES.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => handleCategoryChange(cat.id)}
+                  className={`px-4 py-2 rounded-full font-sans text-sm transition-all duration-300 flex items-center gap-2 ${
+                    activeCategory === cat.id
+                      ? 'bg-forest text-cream'
+                      : 'bg-cream text-forest hover:bg-forest/10'
+                  }`}
+                >
+                  {cat.label}
+                  <span className={`text-xs ${activeCategory === cat.id ? 'text-cream/70' : 'text-loam/50'}`}>
+                    {categoryCounts[cat.id]}
+                  </span>
+                </button>
+              ))}
+            </div>
 
-            {/* Search Input */}
-            <div className="relative max-w-md mb-8 md:mb-0">
-              <input
-                type="text"
-                placeholder="Search grains..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent border-b border-forest/20 py-2 font-sans text-forest placeholder:text-forest/40 focus:outline-none focus:border-forest transition-colors"
-              />
+            {/* Mobile Filter Toggle */}
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="md:hidden flex items-center gap-2 bg-cream px-4 py-2 rounded-full font-sans text-sm text-forest"
+            >
+              <SlidersHorizontal size={16} />
+              Filters
+              {activeCategory !== 'all' && (
+                <span className="bg-clay text-cream text-xs px-2 py-0.5 rounded-full">1</span>
+              )}
+            </button>
+
+            {/* Search & Sort */}
+            <div className="flex items-center gap-3">
+              {/* Search */}
+              <div className="relative flex-1 md:w-64">
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-loam/40" />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-cream rounded-full pl-10 pr-4 py-2 font-sans text-sm text-forest placeholder:text-loam/40 focus:outline-none focus:ring-2 focus:ring-forest/20 transition-all"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-loam/40 hover:text-forest"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
+              </div>
+
+              {/* Sort Dropdown */}
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="bg-cream rounded-full px-4 py-2 font-sans text-sm text-forest focus:outline-none focus:ring-2 focus:ring-forest/20 cursor-pointer"
+              >
+                {SORT_OPTIONS.map(option => (
+                  <option key={option.id} value={option.id}>{option.label}</option>
+                ))}
+              </select>
             </div>
           </div>
 
-          {/* Filter Tabs */}
-          <div className="flex flex-wrap gap-4 md:gap-6 mt-4 md:mt-0">
-            {CATEGORIES.map((cat, i) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-
-                className={`font-sans uppercase tracking-widest text-xs md:text-sm transition-all duration-300 pb-1 border-b-2 ${activeCategory === cat.id
-                  ? 'text-clay border-clay'
-                  : 'text-loam/40 border-transparent hover:text-forest'
-                  }`}
+          {/* Mobile Category Pills */}
+          <AnimatePresence>
+            {showFilters && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="md:hidden overflow-hidden"
               >
-                {cat.label}
-              </button>
-            ))}
-          </div>
+                <div className="flex flex-wrap gap-2 pt-4">
+                  {CATEGORIES.map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => {
+                        handleCategoryChange(cat.id);
+                        setShowFilters(false);
+                      }}
+                      className={`px-3 py-1.5 rounded-full font-sans text-xs transition-all duration-300 ${
+                        activeCategory === cat.id
+                          ? 'bg-forest text-cream'
+                          : 'bg-cream text-forest'
+                      }`}
+                    >
+                      {cat.label} ({categoryCounts[cat.id]})
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Results Count */}
+        <div className="mb-6 flex items-center justify-between">
+          <p className="font-sans text-sm text-loam/60">
+            {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}
+            {activeCategory !== 'all' && ` in ${CATEGORIES.find(c => c.id === activeCategory)?.label}`}
+            {searchQuery && ` matching "${searchQuery}"`}
+          </p>
+          {(activeCategory !== 'all' || searchQuery) && (
+            <button
+              onClick={() => {
+                handleCategoryChange('all');
+                setSearchQuery('');
+              }}
+              className="font-sans text-sm text-clay hover:text-forest transition-colors"
+            >
+              Clear filters
+            </button>
+          )}
         </div>
 
         {/* Product Grid */}
-        <motion.div
-          layout
-          className="grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-12 md:gap-x-12 md:gap-y-24"
-        >
-          <AnimatePresence mode='popLayout'>
-            {filteredProducts.map((product) => (
-              <motion.div
-                layout
-                key={product.id}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                className="group flex flex-col cursor-pointer"
-                onClick={() => navigate(`/product/${product.handle}`)}
-              >
-                {/* Image Area */}
-                <div className="relative aspect-[4/5] mb-4 md:mb-8 bg-cream overflow-hidden rounded-[4px]">
-                  <div className="absolute inset-0 bg-forest/5 group-hover:bg-transparent transition-colors duration-700" />
-                  <motion.img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover mix-blend-multiply contrast-[1.05] brightness-105 group-hover:scale-105 transition-transform duration-[2000ms] ease-out"
-                  />
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+          {filteredProducts.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              addToCart={addToCart}
+              index={0}
+            />
+          ))}
+        </div>
 
-                  {/* Quick Add Overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-forest/10 backdrop-blur-[1px]">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        addToCart(product);
-                      }}
-
-                      className="bg-cream text-forest px-4 py-2 md:px-8 md:py-4 rounded-full font-sans uppercase tracking-widest text-[10px] md:text-xs font-bold hover:bg-gold hover:text-forest transition-colors shadow-xl translate-y-4 group-hover:translate-y-0 transition-transform duration-500"
-                    >
-                      Add — ${product.price.toFixed(2)}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Text Area */}
-                <div className="text-left">
-                  <div className="flex flex-col md:flex-row justify-between items-start md:items-baseline mb-1 md:mb-2">
-                    <h3 className="font-serif text-lg md:text-2xl text-forest group-hover:text-clay transition-colors duration-300 leading-tight">{product.name}</h3>
-                    <span className="font-sans text-forest font-medium text-sm md:text-base mt-1 md:mt-0">${product.price.toFixed(2)}</span>
-                  </div>
-                  <p className="font-sans text-loam/60 text-[10px] md:text-xs uppercase tracking-widest mb-2 md:mb-3">{product.weight}</p>
-
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
-
+        {/* Empty State */}
         {filteredProducts.length === 0 && (
-          <div className="py-32 text-center">
-            <p className="font-serif text-3xl text-loam/40">The pantry is empty for this selection.</p>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="py-24 text-center"
+          >
+            <p className="font-serif text-3xl text-forest mb-4">No products found</p>
+            <p className="font-sans text-loam/60 mb-8">Try adjusting your search or filter criteria.</p>
+            <button
+              onClick={() => {
+                handleCategoryChange('all');
+                setSearchQuery('');
+              }}
+              className="bg-forest text-cream px-6 py-3 rounded-full font-sans uppercase tracking-widest text-sm hover:bg-clay transition-colors"
+            >
+              View All Products
+            </button>
+          </motion.div>
         )}
-
       </div>
     </motion.div>
   );

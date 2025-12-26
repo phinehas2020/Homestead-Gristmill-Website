@@ -265,7 +265,7 @@ function AppContent() {
 
 
       {/* Navigation */}
-      <nav className={`fixed top-0 left-0 w-full z-40 px-6 py-6 flex justify-between items-center transition-colors duration-500 ${location.pathname === '/products' ? 'text-forest' : 'text-cream mix-blend-difference'}`}>
+      <nav className="fixed top-0 left-0 w-full z-40 px-6 py-6 flex justify-between items-center transition-colors duration-500 text-cream mix-blend-difference">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}

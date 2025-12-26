@@ -1,118 +1,125 @@
 
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import WheatDivider from './WheatDivider';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { Flame, Droplets, Wheat, Heart, ArrowRight } from 'lucide-react';
+
+const ValueProp: React.FC<{
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  index: number;
+}> = ({ icon, title, description, index }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.6, delay: index * 0.1 }}
+    className="flex flex-col items-center text-center p-6 md:p-8"
+  >
+    <div className="w-16 h-16 rounded-full bg-gold/10 flex items-center justify-center mb-6">
+      {icon}
+    </div>
+    <h3 className="font-serif text-2xl text-forest mb-3">{title}</h3>
+    <p className="font-sans text-loam/70 leading-relaxed">{description}</p>
+  </motion.div>
+);
 
 const Narrative: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
+  const navigate = useNavigate();
 
-  const ySlow = useTransform(scrollYProgress, [0, 1], [0, 100]);
-  const yFast = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  const values = [
+    {
+      icon: <Wheat className="w-7 h-7 text-gold" />,
+      title: "Stone Ground",
+      description: "Our granite millstones crush the whole grain slowly, preserving the germ, bran, and all the nutrition."
+    },
+    {
+      icon: <Droplets className="w-7 h-7 text-gold" />,
+      title: "Milled Fresh",
+      description: "We mill in small batches weekly. Your flour is never more than days old—not years like grocery store flour."
+    },
+    {
+      icon: <Flame className="w-7 h-7 text-gold" />,
+      title: "Cool & Slow",
+      description: "Heat destroys nutrients. Our stones turn slowly, keeping temperatures low to preserve natural oils and flavor."
+    },
+    {
+      icon: <Heart className="w-7 h-7 text-gold" />,
+      title: "Heritage Grains",
+      description: "Non-GMO, heritage varieties grown by partner farms. Grains with character, flavor, and history."
+    }
+  ];
 
   return (
-    <section id="story" ref={containerRef} className="bg-cream relative py-32 overflow-hidden">
-      <div className="container mx-auto px-6 md:px-12 max-w-7xl">
+    <section id="story" className="bg-cream relative py-20 md:py-28 overflow-hidden">
+      {/* Decorative Background */}
+      <div className="absolute inset-0 opacity-[0.02]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,#D4AF37_0%,transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,#B45E44_0%,transparent_50%)]" />
+      </div>
 
-        {/* Part 1: The Problem */}
-        <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24 mb-32">
-          <div className="w-full md:w-1/2">
-            <motion.div
-              style={{ y: ySlow }}
-              className="relative"
-            >
-              {/* Sterile, cold, industrial image */}
-              <img
-                src="/industrial-flour-v2.png"
-                alt="Sterile industrial environment"
-                className="w-full h-[600px] object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-[2000ms] ease-out rounded-[40px_10px_50px_20px]"
-              />
-              <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-bone rounded-full -z-10 opacity-50" />
-            </motion.div>
-          </div>
-          <div className="w-full md:w-1/2 space-y-8">
-            <motion.span
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1 }}
-              viewport={{ once: true }}
-              className="text-clay font-bold uppercase tracking-widest text-sm"
-            >
-              The Disconnect
-            </motion.span>
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              viewport={{ once: true }}
-              className="font-serif text-5xl md:text-7xl text-forest leading-tight"
-            >
-              We forgot how to <span className="italic text-loam">eat</span>.
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="font-sans text-xl text-loam/80 leading-relaxed"
-            >
-              Modern flour is dead. It’s been stripped of its oils, its nutrients, and its soul to sit on a shelf for two years. It is white powder, not food.
-            </motion.p>
-          </div>
+      <div className="container mx-auto px-6 max-w-6xl relative z-10">
+        {/* Header */}
+        <div className="text-center mb-16 md:mb-20">
+          <motion.span
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-clay font-sans uppercase tracking-[0.2em] text-xs mb-4 block"
+          >
+            Why Homestead
+          </motion.span>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="font-serif text-4xl md:text-6xl text-forest mb-6"
+          >
+            Not All Flour is Equal
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="font-sans text-lg md:text-xl text-loam/70 max-w-2xl mx-auto"
+          >
+            Grocery store flour is stripped, bleached, and sits for years.
+            Ours is whole, fresh, and alive with flavor.
+          </motion.p>
         </div>
 
-        <WheatDivider />
-
-        {/* Part 2: The Solution */}
-        <div className="flex flex-col md:flex-row-reverse items-center gap-12 md:gap-24 mt-32">
-          <div className="w-full md:w-1/2">
-            <motion.div
-              style={{ y: yFast }}
-              className="relative"
-            >
-              {/* Warm, textural, messy hands image */}
-              <img
-                src="/rustic-kneading.png"
-                alt="Hands kneading dough on rustic table"
-                className="w-full h-[600px] object-cover sepia-[0.3] hover:sepia-0 transition-all duration-[2000ms] ease-out rounded-[20px_100px_30px_80px]"
-              />
-              <div className="absolute -top-10 -left-10 w-64 h-64 bg-gold/20 rounded-full -z-10 blur-3xl" />
-            </motion.div>
-          </div>
-          <div className="w-full md:w-1/2 space-y-8 text-left md:text-right">
-            <motion.span
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1 }}
-              viewport={{ once: true }}
-              className="text-gold font-bold uppercase tracking-widest text-sm"
-            >
-              The Return
-            </motion.span>
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              viewport={{ once: true }}
-              className="font-serif text-5xl md:text-7xl text-forest leading-tight"
-            >
-              Wholesome flour <span className="text-clay">returns</span>.
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="font-sans text-xl text-loam/80 leading-relaxed"
-            >
-              We mill cool and slow. Our stones crush the grain, preserving the germ and the bran. It smells like grass and rain. It bakes loaves that sing.
-            </motion.p>
-          </div>
+        {/* Value Props Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-2 mb-16">
+          {values.map((value, index) => (
+            <ValueProp key={value.title} {...value} index={index} />
+          ))}
         </div>
 
+        {/* Comparison Strip */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="bg-forest rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8"
+        >
+          <div className="flex-1 text-center md:text-left">
+            <h3 className="font-serif text-3xl md:text-4xl text-cream mb-3">
+              Taste the difference yourself.
+            </h3>
+            <p className="font-sans text-cream/70">
+              Once you bake with fresh-milled flour, you'll never go back.
+            </p>
+          </div>
+          <button
+            onClick={() => navigate('/products')}
+            className="group bg-clay hover:bg-gold text-cream px-8 py-4 rounded-full font-sans uppercase tracking-widest text-sm flex items-center gap-3 transition-all duration-300 whitespace-nowrap"
+          >
+            Shop Fresh Flour
+            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+          </button>
+        </motion.div>
       </div>
     </section>
   );

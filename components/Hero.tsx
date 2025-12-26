@@ -1,12 +1,13 @@
 import React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-
-
+import { useNavigate } from 'react-router-dom';
+import { ArrowRight, Truck, Leaf, Clock } from 'lucide-react';
 
 const Hero: React.FC = () => {
+  const navigate = useNavigate();
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 500], [0, 100]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+  const opacity = useTransform(scrollY, [0, 400], [1, 0]);
 
   return (
     <section id="mill" className="relative h-[100dvh] w-full overflow-hidden flex flex-col">
@@ -15,15 +16,15 @@ const Hero: React.FC = () => {
         style={{ y: y1 }}
         className="absolute -top-[10%] -bottom-[10%] inset-x-0 z-0"
       >
-        {/* The Scrim Gradient - Deepened for the new lifestyle imagery */}
+        {/* The Scrim Gradient */}
         <div
           className="absolute inset-0 z-10"
           style={{
-            background: 'linear-gradient(to right, #1A3A2A 0%, rgba(26, 58, 42, 0.9) 35%, rgba(26, 58, 42, 0) 80%)'
+            background: 'linear-gradient(to right, #1A3A2A 0%, rgba(26, 58, 42, 0.85) 40%, rgba(26, 58, 42, 0.2) 75%, rgba(26, 58, 42, 0) 100%)'
           }}
         />
 
-        {/* Hero Image - Lifestyle Table Setting */}
+        {/* Hero Image */}
         <img
           src="/hero-holiday.png"
           alt="Homestead Gristmill holiday Table"
@@ -31,12 +32,12 @@ const Hero: React.FC = () => {
         />
       </motion.div>
 
-      {/* Content Layer - Aligned Left in the dark zone */}
+      {/* Content Layer */}
       <motion.div
         style={{ opacity }}
-        className="relative z-20 px-6 md:pl-24 md:pr-24 max-w-7xl w-full mx-auto flex flex-col items-start text-left h-full justify-center pb-24 md:pb-0"
+        className="relative z-20 px-6 md:pl-24 md:pr-24 max-w-7xl w-full mx-auto flex flex-col items-start text-left h-full justify-center pb-32 md:pb-0"
       >
-        {/* Vertical "Est. 1989" Label */}
+        {/* Vertical Est Label */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -48,25 +49,23 @@ const Hero: React.FC = () => {
           </span>
         </motion.div>
 
-        {/* Mobile only Est label */}
+        {/* Mobile Est label */}
         <motion.span
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
           className="md:hidden block text-gold font-sans uppercase tracking-[0.3em] text-xs mb-4"
         >
-          Est. 1989
+          Stone-Ground Heritage Flour
         </motion.span>
 
-        <div
-          className="font-serif text-6xl md:text-8xl lg:text-[10rem] text-cream mb-8 relative z-50 flex flex-col items-start"
-
-        >
+        {/* Main Headline */}
+        <div className="font-serif text-6xl md:text-8xl lg:text-[9rem] text-cream mb-6 relative z-50 flex flex-col items-start">
           <motion.span
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
-            className="block leading-[1.3] pt-4 pb-4 overflow-visible origin-left"
+            className="block leading-[1.1] overflow-visible origin-left"
           >
             Eat
           </motion.span>
@@ -74,38 +73,70 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: 0.6 }}
-            className="block leading-[1.3] pt-2 overflow-visible origin-left"
+            className="block leading-[1.1] overflow-visible origin-left"
           >
             Different.
           </motion.span>
         </div>
 
+        {/* Subheadline */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.5, ease: "easeOut", delay: 0.8 }}
-          className="font-sans text-cream/90 text-lg md:text-xl max-w-md font-light leading-relaxed tracking-wide ml-1"
+          className="font-sans text-cream/90 text-lg md:text-xl max-w-md font-light leading-relaxed tracking-wide mb-8"
         >
-          Slow food for a fast world. We mill heritage grains for people who care about what they eat.
+          Stone-ground heritage flour, milled fresh weekly. For bakers who taste the difference.
         </motion.p>
+
+        {/* CTA Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, ease: "easeOut", delay: 1 }}
+          className="flex flex-col sm:flex-row gap-4"
+        >
+          <button
+            onClick={() => navigate('/products')}
+            className="group bg-clay hover:bg-gold text-cream px-8 py-4 rounded-full font-sans uppercase tracking-widest text-sm flex items-center gap-3 transition-all duration-300 hover:gap-5"
+          >
+            Shop Our Flour
+            <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+          </button>
+          <button
+            onClick={() => document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' })}
+            className="bg-cream/10 hover:bg-cream/20 text-cream border border-cream/30 px-8 py-4 rounded-full font-sans uppercase tracking-widest text-sm transition-all duration-300 backdrop-blur-sm"
+          >
+            View Bestsellers
+          </button>
+        </motion.div>
       </motion.div>
 
-      {/* Scroll Indicator */}
+      {/* Trust Bar - Bottom of Hero */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 1 }}
-        className="absolute bottom-12 inset-x-0 z-40"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.5, duration: 1 }}
+        className="absolute bottom-0 inset-x-0 z-30 bg-forest/80 backdrop-blur-md border-t border-cream/10"
       >
-        <div className="max-w-7xl w-full mx-auto px-6 md:px-24 flex items-center gap-4">
-          <div className="w-16 h-[1px] bg-cream/30 overflow-hidden relative">
-            <motion.div
-              className="w-full h-full bg-gold absolute top-0 left-0"
-              animate={{ x: ["-100%", "100%"] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            />
+        <div className="max-w-7xl mx-auto px-6 md:px-24 py-4 md:py-5">
+          <div className="flex flex-wrap justify-center md:justify-between items-center gap-6 md:gap-4">
+            {/* Trust Items */}
+            <div className="flex items-center gap-3 text-cream/80">
+              <Clock size={18} className="text-gold" />
+              <span className="font-sans text-xs md:text-sm uppercase tracking-wider">Milled Fresh Weekly</span>
+            </div>
+            <div className="hidden md:block w-px h-6 bg-cream/20" />
+            <div className="flex items-center gap-3 text-cream/80">
+              <Leaf size={18} className="text-gold" />
+              <span className="font-sans text-xs md:text-sm uppercase tracking-wider">Non-GMO Heritage Grains</span>
+            </div>
+            <div className="hidden md:block w-px h-6 bg-cream/20" />
+            <div className="flex items-center gap-3 text-cream/80">
+              <Truck size={18} className="text-gold" />
+              <span className="font-sans text-xs md:text-sm uppercase tracking-wider">Ships Nationwide</span>
+            </div>
           </div>
-          <span className="text-cream/60 text-xs uppercase tracking-widest font-sans">Begin</span>
         </div>
       </motion.div>
     </section>
