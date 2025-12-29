@@ -51,7 +51,7 @@ const StoryPage: React.FC = () => {
                         initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1, delay: 0.4 }}
-                        className="font-serif text-6xl md:text-8xl lg:text-9xl text-cream leading-[0.9] mb-8"
+                        className="font-serif text-5xl md:text-8xl lg:text-9xl text-cream leading-[0.9] mb-8"
                     >
                         A Mill<br />
                         <span className="text-gold">Reborn</span>
@@ -100,7 +100,7 @@ const StoryPage: React.FC = () => {
                         className="space-y-6"
                     >
                         <div className="flex items-center gap-4">
-                            <span className="text-gold font-serif text-7xl md:text-9xl opacity-30">1760</span>
+                            <span className="text-gold font-serif text-6xl md:text-7xl lg:text-9xl opacity-30">1760</span>
                         </div>
                         <h2 className="font-serif text-4xl md:text-5xl text-forest leading-tight">
                             The Foundation
@@ -185,7 +185,7 @@ const StoryPage: React.FC = () => {
                             className="space-y-6 order-1 lg:order-2"
                         >
                             <div className="flex items-center gap-4">
-                                <span className="text-gold font-serif text-7xl md:text-9xl opacity-30">1918</span>
+                                <span className="text-gold font-serif text-6xl md:text-7xl lg:text-9xl opacity-30">1918</span>
                             </div>
                             <h2 className="font-serif text-4xl md:text-5xl text-cream leading-tight">
                                 The Long Silence
@@ -216,7 +216,7 @@ const StoryPage: React.FC = () => {
                         className="space-y-6"
                     >
                         <div className="flex items-center gap-4">
-                            <span className="text-clay font-serif text-7xl md:text-9xl opacity-30">2001</span>
+                            <span className="text-clay font-serif text-6xl md:text-7xl lg:text-9xl opacity-30">2001</span>
                         </div>
                         <h2 className="font-serif text-4xl md:text-5xl text-forest leading-tight">
                             A New Home

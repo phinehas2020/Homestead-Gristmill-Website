@@ -10,7 +10,7 @@ const Hero: React.FC = () => {
   const opacity = useTransform(scrollY, [0, 400], [1, 0]);
 
   return (
-    <section id="mill" className="relative h-[100dvh] w-full overflow-hidden flex flex-col">
+    <section id="mill" className="relative h-[85vh] md:h-[100dvh] w-full overflow-hidden flex flex-col">
       {/* Background Parallax Layer */}
       <motion.div
         style={{ y: y1 }}
@@ -24,18 +24,39 @@ const Hero: React.FC = () => {
           }}
         />
 
-        {/* Hero Image */}
-        <img
-          src="/hero-holiday.png"
-          alt="Homestead Gristmill holiday Table"
-          className="w-full h-full object-cover object-[65%_center] md:object-center"
-        />
+        {/* Hero Image - Responsive & Optimized */}
+        <picture>
+          {/* WebP format for modern browsers - Mobile */}
+          <source
+            media="(max-width: 768px)"
+            srcSet="/hero-holiday.png?width=800&format=webp"
+            type="image/webp"
+          />
+          {/* WebP format for modern browsers - Desktop */}
+          <source
+            srcSet="/hero-holiday.png?width=1920&format=webp"
+            type="image/webp"
+          />
+          {/* Fallback PNG - Mobile */}
+          <source
+            media="(max-width: 768px)"
+            srcSet="/hero-holiday.png?width=800"
+          />
+          {/* Fallback PNG - Desktop */}
+          <img
+            src="/hero-holiday.png"
+            alt="Homestead Gristmill holiday Table"
+            className="w-full h-full object-cover object-[65%_center] md:object-center"
+            loading="eager"
+            fetchPriority="high"
+          />
+        </picture>
       </motion.div>
 
       {/* Content Layer */}
       <motion.div
         style={{ opacity }}
-        className="relative z-20 px-6 md:pl-24 md:pr-24 max-w-7xl w-full mx-auto flex flex-col items-start text-left h-full justify-center pb-32 md:pb-0"
+        className="relative z-20 px-6 md:pl-24 md:pr-24 max-w-7xl w-full mx-auto flex flex-col items-start text-left h-full justify-center pb-24 md:pb-32"
       >
         {/* Vertical Est Label */}
         <motion.div
@@ -60,12 +81,12 @@ const Hero: React.FC = () => {
         </motion.span>
 
         {/* Main Headline */}
-        <div className="font-serif text-6xl md:text-8xl lg:text-[9rem] text-cream mb-6 relative z-50 flex flex-col items-start">
+        <div className="font-serif text-5xl md:text-8xl lg:text-[9rem] text-cream mb-6 relative z-50 flex flex-col items-start">
           <motion.span
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
-            className="block leading-[1.1] overflow-visible origin-left"
+            className="block leading-[0.95] md:leading-[1.1] overflow-visible origin-left"
           >
             Eat
           </motion.span>
@@ -73,7 +94,7 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: 0.6 }}
-            className="block leading-[1.1] overflow-visible origin-left"
+            className="block leading-[0.95] md:leading-[1.1] overflow-visible origin-left"
           >
             Different.
           </motion.span>
@@ -84,7 +105,7 @@ const Hero: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.5, ease: "easeOut", delay: 0.8 }}
-          className="font-sans text-cream/90 text-lg md:text-xl max-w-md font-light leading-relaxed tracking-wide mb-8"
+          className="font-sans text-cream/90 text-base md:text-lg lg:text-xl max-w-md font-light leading-relaxed tracking-wide mb-8"
         >
           Stone-ground heritage flour, milled fresh weekly. For bakers who taste the difference.
         </motion.p>

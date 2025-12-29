@@ -82,7 +82,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="bg-bone min-h-screen pt-24 pb-24"
+            className="bg-bone min-h-screen pt-24 pb-32 lg:pb-24"
         >
             {/* Breadcrumb */}
             <div className="bg-cream border-b border-forest/5">
@@ -364,23 +364,55 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
             </div>
 
             {/* Mobile Sticky Add to Cart */}
-            <div className="fixed bottom-0 left-0 right-0 bg-cream border-t border-forest/10 p-4 lg:hidden z-40">
-                <div className="flex items-center gap-4">
-                    <div className="flex-1">
-                        <p className="font-serif text-lg text-forest line-clamp-1">{product.name}</p>
-                        <p className="font-sans text-clay">${(activeVariant?.price || product.price).toFixed(2)}</p>
+            <div className="fixed bottom-0 left-0 right-0 bg-cream/95 backdrop-blur-md border-t border-forest/10 p-4 lg:hidden z-40 shadow-lg">
+                <div className="flex items-center gap-3">
+                    {/* Product Info */}
+                    <div className="flex-1 min-w-0">
+                        <p className="font-serif text-base text-forest line-clamp-1 mb-1">{product.name}</p>
+                        <p className="font-sans text-clay font-medium">${((activeVariant?.price || product.price) * quantity).toFixed(2)}</p>
                     </div>
+
+                    {/* Quantity Selector - Compact */}
+                    <div className="flex items-center gap-1 bg-bone rounded-full p-1">
+                        <button
+                            onClick={decrement}
+                            disabled={quantity <= 1}
+                            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-cream transition-colors"
+                        >
+                            <Minus size={14} className={quantity <= 1 ? 'text-loam/30' : 'text-forest'} />
+                        </button>
+                        <span className="w-7 text-center font-sans text-sm text-forest font-medium">{quantity}</span>
+                        <button
+                            onClick={increment}
+                            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-cream transition-colors"
+                        >
+                            <Plus size={14} className="text-forest" />
+                        </button>
+                    </div>
+
+                    {/* Add Button */}
                     <button
                         onClick={handleAddToCart}
                         disabled={isAdding || justAdded}
-                        className={`px-6 py-3 rounded-full font-sans uppercase tracking-widest text-xs flex items-center gap-2 transition-all ${
+                        className={`px-6 py-3.5 rounded-full font-sans uppercase tracking-widest text-xs flex items-center gap-2 transition-all whitespace-nowrap ${
                             justAdded
                                 ? 'bg-green-600 text-cream'
-                                : 'bg-forest text-cream'
+                                : 'bg-forest text-cream hover:bg-clay'
                         }`}
                     >
-                        {justAdded ? <Check size={16} /> : <ShoppingBag size={16} />}
-                        {justAdded ? 'Added!' : 'Add'}
+                        {justAdded ? (
+                            <>
+                                <Check size={16} />
+                                Added!
+                            </>
+                        ) : isAdding ? (
+                            <span className="animate-pulse">...</span>
+                        ) : (
+                            <>
+                                <ShoppingBag size={16} />
+                                Add
+                            </>
+                        )}
                     </button>
                 </div>
             </div>

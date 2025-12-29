@@ -107,17 +107,17 @@ const ProductCard: React.FC<{
           <div className="flex items-center gap-0.5 bg-bone rounded-full p-0.5">
             <button
               onClick={(e) => { e.stopPropagation(); setQuantity(Math.max(1, quantity - 1)); }}
-              className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-cream transition-colors"
+              className="w-9 h-9 md:w-7 md:h-7 flex items-center justify-center rounded-full hover:bg-cream transition-colors"
               disabled={quantity <= 1}
             >
-              <Minus size={12} className={quantity <= 1 ? 'text-loam/30' : 'text-forest'} />
+              <Minus size={14} className={quantity <= 1 ? 'text-loam/30' : 'text-forest'} />
             </button>
-            <span className="w-6 text-center font-sans text-xs text-forest">{quantity}</span>
+            <span className="w-8 md:w-6 text-center font-sans text-xs text-forest">{quantity}</span>
             <button
               onClick={(e) => { e.stopPropagation(); setQuantity(quantity + 1); }}
-              className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-cream transition-colors"
+              className="w-9 h-9 md:w-7 md:h-7 flex items-center justify-center rounded-full hover:bg-cream transition-colors"
             >
-              <Plus size={12} className="text-forest" />
+              <Plus size={14} className="text-forest" />
             </button>
           </div>
         </div>
@@ -126,7 +126,7 @@ const ProductCard: React.FC<{
         <button
           onClick={handleAddToCart}
           disabled={isAdding || justAdded}
-          className={`w-full py-3 rounded-full font-sans uppercase tracking-widest text-[10px] md:text-xs flex items-center justify-center gap-2 transition-all duration-300 ${
+          className={`w-full py-3.5 md:py-3 rounded-full font-sans uppercase tracking-widest text-[10px] md:text-xs flex items-center justify-center gap-2 transition-all duration-300 ${
             justAdded
               ? 'bg-green-600 text-cream'
               : 'bg-forest text-cream hover:bg-clay'
@@ -266,7 +266,7 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart }) => {
                 <button
                   key={cat.id}
                   onClick={() => handleCategoryChange(cat.id)}
-                  className={`px-4 py-2 rounded-full font-sans text-sm transition-all duration-300 flex items-center gap-2 ${
+                  className={`px-4 py-2.5 rounded-full font-sans text-sm transition-all duration-300 flex items-center gap-2 ${
                     activeCategory === cat.id
                       ? 'bg-forest text-cream'
                       : 'bg-cream text-forest hover:bg-forest/10'
@@ -344,7 +344,7 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart }) => {
                         handleCategoryChange(cat.id);
                         setShowFilters(false);
                       }}
-                      className={`px-3 py-1.5 rounded-full font-sans text-xs transition-all duration-300 ${
+                      className={`px-4 py-2.5 rounded-full font-sans text-xs transition-all duration-300 ${
                         activeCategory === cat.id
                           ? 'bg-forest text-cream'
                           : 'bg-cream text-forest'
