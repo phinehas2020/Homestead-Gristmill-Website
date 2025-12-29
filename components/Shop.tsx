@@ -98,17 +98,17 @@ const ProductCard: React.FC<{
             <div className="flex items-center gap-1 bg-bone rounded-full p-1">
               <button
                 onClick={(e) => { e.stopPropagation(); setQuantity(Math.max(1, quantity - 1)); }}
-                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-cream transition-colors"
+                className="w-10 h-10 md:w-8 md:h-8 flex items-center justify-center rounded-full hover:bg-cream transition-colors"
                 disabled={quantity <= 1}
               >
-                <Minus size={14} className={quantity <= 1 ? 'text-loam/30' : 'text-forest'} />
+                <Minus size={16} className={quantity <= 1 ? 'text-loam/30' : 'text-forest'} />
               </button>
-              <span className="w-8 text-center font-sans text-sm text-forest">{quantity}</span>
+              <span className="w-10 md:w-8 text-center font-sans text-sm text-forest">{quantity}</span>
               <button
                 onClick={(e) => { e.stopPropagation(); setQuantity(quantity + 1); }}
-                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-cream transition-colors"
+                className="w-10 h-10 md:w-8 md:h-8 flex items-center justify-center rounded-full hover:bg-cream transition-colors"
               >
-                <Plus size={14} className="text-forest" />
+                <Plus size={16} className="text-forest" />
               </button>
             </div>
           </div>
