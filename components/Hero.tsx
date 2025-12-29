@@ -133,12 +133,12 @@ const Hero: React.FC = () => {
         </motion.div>
       </motion.div>
 
-      {/* Trust Bar - Bottom of Hero */}
+      {/* Trust Bar - Bottom of Hero - Hidden on Mobile */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.5, duration: 1 }}
-        className="absolute bottom-0 inset-x-0 z-30 bg-forest/80 backdrop-blur-md border-t border-cream/10"
+        className="hidden md:block absolute bottom-0 inset-x-0 z-30 bg-forest/80 backdrop-blur-md border-t border-cream/10"
       >
         <div className="max-w-7xl mx-auto px-6 md:px-24 py-4 md:py-5">
           <div className="flex flex-wrap justify-center md:justify-between items-center gap-6 md:gap-4">
