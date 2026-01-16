@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { Product } from '../types';
 import { ShoppingBag, Plus, Minus, ArrowRight, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';

@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Product } from '../types';
 import { ShoppingBag, Search, X, Plus, Minus, Check, SlidersHorizontal } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';

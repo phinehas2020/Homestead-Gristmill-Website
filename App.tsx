@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, Menu, X, User } from 'lucide-react';
 import { Product } from './types';
 import { ShopifyProvider, useShopify } from './context/ShopifyContext';

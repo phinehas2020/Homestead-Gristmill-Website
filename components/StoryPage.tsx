@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, MapPin, Clock, Phone, ChevronDown } from 'lucide-react';
 

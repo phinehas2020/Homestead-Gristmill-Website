@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Mail, Star } from 'lucide-react';
 
