@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { Product } from '../types';
 import { ShoppingBag, Search, X, Plus, Minus, Check, SlidersHorizontal } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -57,12 +57,16 @@ const ProductCard: React.FC<{
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
-      className="group relative flex flex-col bg-cream rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300"
+      className="group relative flex flex-col bg-cream/90 rounded-2xl overflow-hidden soft-card transition-all duration-300 hover:-translate-y-0.5"
     >
       {/* Image Container */}
       <div
         onClick={handleProductClick}
-        className="relative w-full aspect-square overflow-hidden bg-bone cursor-pointer"
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleProductClick(); } }}
+        role="button"
+        tabIndex={0}
+        className="relative w-full aspect-square overflow-hidden bg-cream/70 cursor-pointer"
+        aria-label={`View ${product.name} details`}
       >
         {/* Category Badge */}
         <div className="absolute top-3 left-3 z-20">
@@ -81,7 +85,7 @@ const ProductCard: React.FC<{
 
         {/* Quick View Overlay */}
         <div className="absolute inset-0 bg-forest/0 group-hover:bg-forest/10 transition-colors duration-300 flex items-center justify-center">
-          <span className="bg-cream/95 text-forest px-4 py-2 rounded-full font-sans text-[10px] uppercase tracking-widest shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="bg-cream/95 text-forest px-4 py-2 rounded-full font-sans text-[10px] uppercase tracking-widest shadow-lg border border-forest/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             View Details
           </span>
         </div>
@@ -90,32 +94,36 @@ const ProductCard: React.FC<{
       {/* Product Info */}
       <div className="p-4 md:p-5 flex flex-col flex-grow">
         <div className="flex-grow mb-3">
-          <h3
-            onClick={handleProductClick}
-            className="font-serif text-lg md:text-xl text-forest mb-1 cursor-pointer hover:text-clay transition-colors leading-tight line-clamp-2"
-          >
-            {product.name}
+          <h3 className="font-serif text-lg md:text-xl text-forest mb-1 leading-tight line-clamp-2">
+            <button
+              onClick={handleProductClick}
+              className="text-left hover:text-clay transition-colors cursor-pointer"
+            >
+              {product.name}
+            </button>
           </h3>
           <p className="font-sans text-loam/50 text-xs">{product.weight}</p>
         </div>
 
         {/* Price & Quantity Row */}
         <div className="flex items-center justify-between mb-3">
-          <p className="font-serif text-xl text-clay">${product.price.toFixed(2)}</p>
+          <p className="font-serif text-xl text-clay tabular-nums">${product.price.toFixed(2)}</p>
 
           {/* Compact Quantity Selector */}
-          <div className="flex items-center gap-0.5 bg-bone rounded-full p-0.5">
+          <div className="flex items-center gap-0.5 bg-cream/80 border border-forest/10 rounded-full p-0.5">
             <button
               onClick={(e) => { e.stopPropagation(); setQuantity(Math.max(1, quantity - 1)); }}
               className="w-9 h-9 md:w-7 md:h-7 flex items-center justify-center rounded-full hover:bg-cream transition-colors"
               disabled={quantity <= 1}
+              aria-label="Decrease quantity"
             >
               <Minus size={14} className={quantity <= 1 ? 'text-loam/30' : 'text-forest'} />
             </button>
-            <span className="w-8 md:w-6 text-center font-sans text-xs text-forest">{quantity}</span>
+            <span className="w-8 md:w-6 text-center font-sans text-xs text-forest" aria-live="polite">{quantity}</span>
             <button
               onClick={(e) => { e.stopPropagation(); setQuantity(quantity + 1); }}
               className="w-9 h-9 md:w-7 md:h-7 flex items-center justify-center rounded-full hover:bg-cream transition-colors"
+              aria-label="Increase quantity"
             >
               <Plus size={14} className="text-forest" />
             </button>
@@ -235,13 +243,13 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart }) => {
       className="bg-bone min-h-screen pb-24"
     >
       {/* Hero Header - Full bleed from top */}
-      <div className="bg-forest text-cream pt-32 md:pt-36 pb-12 md:pb-16 px-6 mb-8">
+      <div className="bg-forest text-cream pt-32 md:pt-36 pb-12 md:pb-16 px-6 mb-8 rounded-b-[2.5rem] md:rounded-b-none shadow-[0_18px_60px_-40px_rgba(18,13,9,0.7)]">
         <div className="container mx-auto max-w-7xl">
           <motion.h1
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.1, duration: 0.6 }}
-            className="font-serif text-4xl md:text-6xl lg:text-7xl mb-4"
+            className="font-serif text-4xl md:text-6xl lg:text-7xl mb-4 text-balance"
           >
             Shop All Flour
           </motion.h1>
@@ -249,7 +257,7 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart }) => {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.6 }}
-            className="font-sans text-cream/70 text-lg md:text-xl max-w-xl"
+            className="font-sans text-cream/70 text-lg md:text-xl max-w-xl text-pretty"
           >
             Stone-ground heritage grains, milled fresh weekly in Central Texas.
           </motion.p>
@@ -258,7 +266,7 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart }) => {
 
       <div className="container mx-auto max-w-7xl px-4 md:px-6">
         {/* Filter Bar */}
-        <div className="sticky top-20 z-30 bg-bone/95 backdrop-blur-md py-4 -mx-4 px-4 md:-mx-6 md:px-6 mb-8 border-b border-forest/10">
+        <div className="sticky top-20 z-30 bg-cream/90 backdrop-blur-md py-4 px-4 md:px-6 mb-8 border border-forest/10 rounded-2xl shadow-[0_16px_40px_-35px_rgba(32,24,16,0.45)]">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             {/* Category Tabs - Desktop */}
             <div className="hidden md:flex items-center gap-2">
@@ -266,10 +274,10 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart }) => {
                 <button
                   key={cat.id}
                   onClick={() => handleCategoryChange(cat.id)}
-                  className={`px-4 py-2.5 rounded-full font-sans text-sm transition-all duration-300 flex items-center gap-2 ${
+                  className={`px-4 py-2.5 rounded-full font-sans text-sm transition-all duration-300 flex items-center gap-2 border ${
                     activeCategory === cat.id
-                      ? 'bg-forest text-cream'
-                      : 'bg-cream text-forest hover:bg-forest/10'
+                      ? 'bg-forest text-cream border-forest'
+                      : 'bg-cream/90 text-forest border-forest/10 hover:bg-forest/10'
                   }`}
                 >
                   {cat.label}
@@ -283,7 +291,7 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart }) => {
             {/* Mobile Filter Toggle */}
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="md:hidden flex items-center gap-2 bg-cream px-4 py-2 rounded-full font-sans text-sm text-forest"
+              className="md:hidden flex items-center gap-2 bg-cream px-4 py-2 rounded-full font-sans text-sm text-forest border border-forest/10"
             >
               <SlidersHorizontal size={16} />
               Filters
@@ -296,18 +304,20 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart }) => {
             <div className="flex items-center gap-3">
               {/* Search */}
               <div className="relative flex-1 md:w-64">
-                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-loam/40" />
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-loam/40" aria-hidden="true" />
                 <input
                   type="text"
                   placeholder="Search..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-cream rounded-full pl-10 pr-4 py-2 font-sans text-sm text-forest placeholder:text-loam/40 focus:outline-none focus:ring-2 focus:ring-forest/20 transition-all"
+                  className="w-full bg-cream rounded-full pl-10 pr-4 py-2 font-sans text-sm text-forest placeholder:text-loam/40 border border-forest/10 focus:outline-none focus:ring-2 focus:ring-forest/20 transition-all"
+                  aria-label="Search products"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-loam/40 hover:text-forest"
+                    aria-label="Clear search"
                   >
                     <X size={14} />
                   </button>
@@ -318,7 +328,8 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart }) => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="bg-cream rounded-full px-4 py-2 font-sans text-sm text-forest focus:outline-none focus:ring-2 focus:ring-forest/20 cursor-pointer"
+                className="bg-cream rounded-full px-4 py-2 font-sans text-sm text-forest border border-forest/10 focus:outline-none focus:ring-2 focus:ring-forest/20 cursor-pointer"
+                aria-label="Sort products by"
               >
                 {SORT_OPTIONS.map(option => (
                   <option key={option.id} value={option.id}>{option.label}</option>
@@ -344,10 +355,10 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart }) => {
                         handleCategoryChange(cat.id);
                         setShowFilters(false);
                       }}
-                      className={`px-4 py-2.5 rounded-full font-sans text-xs transition-all duration-300 ${
+                      className={`px-4 py-2.5 rounded-full font-sans text-xs transition-all duration-300 border ${
                         activeCategory === cat.id
-                          ? 'bg-forest text-cream'
-                          : 'bg-cream text-forest'
+                          ? 'bg-forest text-cream border-forest'
+                          : 'bg-cream text-forest border-forest/10'
                       }`}
                     >
                       {cat.label} ({categoryCounts[cat.id]})

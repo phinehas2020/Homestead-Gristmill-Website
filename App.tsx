@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { ShoppingBag, Menu, X, User } from 'lucide-react';
 import { Product } from './types';
 import { ShopifyProvider, useShopify } from './context/ShopifyContext';
@@ -265,7 +265,7 @@ function AppContent() {
 
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full z-40 px-4 py-4 md:px-6 md:py-6 flex justify-between items-center transition-colors duration-500 text-cream mix-blend-difference">
+      <nav className="fixed top-0 left-0 w-full z-40 px-4 py-4 md:px-6 md:py-5 pt-[max(1rem,env(safe-area-inset-top))] flex justify-between items-center bg-cream/85 text-forest backdrop-blur-xl border-b border-forest/10 shadow-[0_10px_40px_-30px_rgba(32,24,16,0.6)] transition-colors duration-500">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -284,6 +284,7 @@ function AppContent() {
             transition={{ duration: 1, delay: 1.1 }}
             onClick={openCart}
             className="relative group"
+            aria-label="Open cart"
           >
             <ShoppingBag className="w-6 h-6 stroke-[1.5px]" />
             {totalItems > 0 && (
@@ -305,6 +306,7 @@ function AppContent() {
             target="_blank"
             rel="noopener noreferrer"
             className="relative group"
+            aria-label="Account"
           >
             <User className="w-6 h-6 stroke-[1.5px]" />
           </motion.a>
@@ -314,6 +316,7 @@ function AppContent() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1.2 }}
             onClick={toggleMenu}
+            aria-label="Open menu"
           >
             <Menu className="w-6 h-6 stroke-[1.5px]" />
           </motion.button>
@@ -366,7 +369,10 @@ function AppContent() {
       <footer className="bg-forest text-cream py-24 px-6 border-t border-cream/10 relative z-10">
         <div className="container mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-3 gap-12">
           <div>
-            <h3 className="font-serif text-3xl mb-6 cursor-pointer" onClick={goHome}>Homestead<br />Gristmill</h3>
+            <button className="font-serif text-3xl mb-6 cursor-pointer text-left" onClick={goHome}>
+              <span className="block">Homestead</span>
+              <span className="block">Gristmill</span>
+            </button>
             <p className="font-sans text-cream/60 text-sm max-w-xs">
               Restoring the honest table, one stone-ground bag at a time.
             </p>
@@ -375,10 +381,10 @@ function AppContent() {
             <h4 className="uppercase text-xs tracking-widest text-gold mb-6">Connect</h4>
             <a href="https://instagram.com/homesteadgristmill" target="_blank" rel="noopener noreferrer" className="block cursor-pointer hover:text-gold transition-colors">Instagram</a>
             <a href="https://www.homesteadheritagetexas.com/blog/" target="_blank" rel="noopener noreferrer" className="block cursor-pointer hover:text-gold transition-colors">Journal</a>
-            <p className="cursor-pointer hover:text-gold transition-colors" onClick={() => navigate('/faq')}>FAQ</p>
+            <button className="block cursor-pointer hover:text-gold transition-colors" onClick={() => navigate('/faq')}>FAQ</button>
           </div>
           <div className="font-sans text-cream/80 space-y-4">
-            <h4 className="uppercase text-xs tracking-widest text-gold mb-6 cursor-pointer hover:text-white transition-colors" onClick={() => navigate('/visit')}>Visit</h4>
+            <button className="uppercase text-xs tracking-widest text-gold mb-6 cursor-pointer hover:text-white transition-colors block" onClick={() => navigate('/visit')}>Visit</button>
             <p className="text-sm">800 Dry Creek Road Suite B</p>
             <p className="text-sm">Waco, Texas 76705</p>
 
@@ -393,6 +399,7 @@ function AppContent() {
                   placeholder="Your email"
                   required
                   className="bg-cream/5 border border-cream/10 rounded-lg px-3 py-2 text-xs w-full focus:outline-none focus:border-gold transition-colors"
+                  aria-label="Email address for newsletter"
                 />
                 <button type="submit" className="bg-clay text-cream px-4 py-2 rounded-lg text-[10px] uppercase tracking-widest font-bold hover:bg-gold hover:text-forest transition-colors">
                   Join
@@ -404,9 +411,9 @@ function AppContent() {
         <div className="mt-24 text-center font-sans text-cream/20 text-xs flex flex-col md:flex-row justify-center items-center gap-4">
           <span>&copy; 2024 Homestead Gristmill. Slow by design.</span>
           <span className="hidden md:inline">•</span>
-          <span className="cursor-pointer hover:text-cream/40 transition-colors" onClick={() => navigate('/privacy')}>Privacy Policy</span>
+          <button className="cursor-pointer hover:text-cream/40 transition-colors" onClick={() => navigate('/privacy')}>Privacy Policy</button>
           <span className="hidden md:inline">•</span>
-          <span className="cursor-pointer hover:text-cream/40 transition-colors" onClick={() => navigate('/terms')}>Terms of Service</span>
+          <button className="cursor-pointer hover:text-cream/40 transition-colors" onClick={() => navigate('/terms')}>Terms of Service</button>
         </div>
       </footer>
 
@@ -425,22 +432,23 @@ function AppContent() {
             <button
               onClick={closeMenu}
               className="absolute top-8 right-8 text-cream"
+              aria-label="Close menu"
             >
               <X size={32} />
             </button>
-            <div className="text-center space-y-8">
+            <nav className="text-center space-y-8" aria-label="Main navigation">
               {NAV_ITEMS.map((item) => (
-                <motion.div
+                <motion.button
                   key={item.name}
                   initial={{ y: 40, opacity: 0 }}
                   whileInView={{ y: 0, opacity: 1 }}
-                  className="font-serif text-5xl md:text-7xl text-cream hover:text-gold transition-colors duration-500 cursor-pointer pointer-events-auto"
+                  className="block w-full font-serif text-5xl md:text-7xl text-cream hover:text-gold transition-colors duration-500 cursor-pointer pointer-events-auto"
                   onClick={() => handleNavClick(item)}
                 >
                   {item.name}
-                </motion.div>
+                </motion.button>
               ))}
-            </div>
+            </nav>
           </motion.div>
         )}
       </AnimatePresence>

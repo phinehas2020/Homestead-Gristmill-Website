@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { Product } from '../types';
 import { ShoppingBag, ArrowLeft, Wheat, Minus, Plus, Check, Truck, Clock, Leaf, ChevronRight } from 'lucide-react';
 
@@ -87,7 +87,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
             {/* Breadcrumb */}
             <div className="bg-cream border-b border-forest/5">
                 <div className="container mx-auto max-w-7xl px-6 py-4">
-                    <nav className="flex items-center gap-2 font-sans text-sm text-loam/60">
+                    <nav className="flex items-center gap-2 font-sans text-sm text-loam/60" aria-label="Breadcrumb">
                         <button onClick={() => navigate('/')} className="hover:text-forest transition-colors">
                             Home
                         </button>
@@ -119,7 +119,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
                         className="relative"
                     >
                         {/* Main Image */}
-                        <div className="relative aspect-square bg-cream rounded-2xl overflow-hidden shadow-lg">
+                        <div className="relative aspect-square bg-cream/90 rounded-3xl overflow-hidden soft-card">
                             <AnimatePresence mode="wait">
                                 <motion.img
                                     key={activeVariant?.image || product.image}
@@ -153,6 +153,8 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
                                                 ? 'border-forest'
                                                 : 'border-transparent opacity-60 hover:opacity-100'
                                         }`}
+                                        aria-label={`Select ${variant.title} variant`}
+                                        aria-pressed={activeVariant?.id === variant.id}
                                     >
                                         <img
                                             src={variant.image || product.image}
@@ -181,12 +183,12 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
                                 </span>
                             </div>
 
-                            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-forest mb-4 leading-[1.1]">
+                            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-forest mb-4 leading-[1.1] text-balance">
                                 {product.name}
                             </h1>
 
                             <div className="flex items-baseline gap-3">
-                                <p className="font-serif text-3xl text-clay">
+                                <p className="font-serif text-3xl text-clay tabular-nums">
                                     ${(activeVariant?.price || product.price).toFixed(2)}
                                 </p>
                                 <span className="font-sans text-loam/50 text-sm">
@@ -196,7 +198,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
                         </div>
 
                         {/* Description */}
-                        <p className="font-sans text-loam/80 text-lg leading-relaxed mb-8">
+                        <p className="font-sans text-loam/80 text-lg leading-relaxed mb-8 text-pretty">
                             {product.description || "Fresh-milled heritage flour, stone-ground to preserve the whole grain's natural nutrition and flavor. Perfect for artisan baking."}
                         </p>
 
@@ -227,20 +229,22 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
                         {/* Quantity & Add to Cart */}
                         <div className="flex flex-col sm:flex-row gap-4 mb-8">
                             {/* Quantity Selector */}
-                            <div className="flex items-center bg-cream border border-forest/10 rounded-full px-4 py-3">
-                                <button
-                                    onClick={decrement}
-                                    className="w-10 h-10 flex items-center justify-center text-forest/50 hover:text-forest transition-colors"
-                                    disabled={quantity <= 1}
+                        <div className="flex items-center bg-cream/90 border border-forest/10 rounded-full px-4 py-3">
+                            <button
+                                onClick={decrement}
+                                className="w-10 h-10 flex items-center justify-center text-forest/50 hover:text-forest transition-colors"
+                                disabled={quantity <= 1}
+                                aria-label="Decrease quantity"
                                 >
                                     <Minus size={18} />
                                 </button>
-                                <span className="font-sans font-medium text-xl text-forest w-12 text-center">
+                                <span className="font-sans font-medium text-xl text-forest w-12 text-center" aria-live="polite">
                                     {quantity}
                                 </span>
                                 <button
                                     onClick={increment}
                                     className="w-10 h-10 flex items-center justify-center text-forest/50 hover:text-forest transition-colors"
+                                    aria-label="Increase quantity"
                                 >
                                     <Plus size={18} />
                                 </button>
@@ -273,7 +277,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
                         </div>
 
                         {/* Trust Signals */}
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-5 bg-cream rounded-xl mb-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-5 bg-cream/80 rounded-2xl soft-card mb-8">
                             <div className="flex items-center gap-3">
                                 <Clock size={18} className="text-gold flex-shrink-0" />
                                 <span className="font-sans text-sm text-forest">Milled Fresh Weekly</span>
@@ -343,9 +347,13 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
                                     viewport={{ once: true }}
                                     transition={{ delay: index * 0.1 }}
                                     onClick={() => navigate(`/product/${relatedProduct.handle}`)}
+                                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(`/product/${relatedProduct.handle}`); } }}
+                                    role="button"
+                                    tabIndex={0}
                                     className="group cursor-pointer"
+                                    aria-label={`View ${relatedProduct.name}`}
                                 >
-                                    <div className="relative aspect-square bg-cream rounded-xl overflow-hidden mb-4">
+                                    <div className="relative aspect-square bg-cream/90 rounded-2xl overflow-hidden soft-card mb-4">
                                         <img
                                             src={relatedProduct.image}
                                             alt={relatedProduct.name}
@@ -364,7 +372,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
             </div>
 
             {/* Mobile Sticky Add to Cart */}
-            <div className="fixed bottom-0 left-0 right-0 bg-cream/95 backdrop-blur-md border-t border-forest/10 p-4 lg:hidden z-40 shadow-lg">
+            <div className="fixed bottom-0 left-0 right-0 bg-cream/90 backdrop-blur-md border-t border-forest/10 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] lg:hidden z-40 rounded-t-3xl shadow-[0_-20px_45px_-35px_rgba(30,24,16,0.6)]">
                 <div className="flex items-center gap-3">
                     {/* Product Info */}
                     <div className="flex-1 min-w-0">
@@ -378,13 +386,15 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
                             onClick={decrement}
                             disabled={quantity <= 1}
                             className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-cream transition-colors"
+                            aria-label="Decrease quantity"
                         >
                             <Minus size={14} className={quantity <= 1 ? 'text-loam/30' : 'text-forest'} />
                         </button>
-                        <span className="w-7 text-center font-sans text-sm text-forest font-medium">{quantity}</span>
+                        <span className="w-7 text-center font-sans text-sm text-forest font-medium" aria-live="polite">{quantity}</span>
                         <button
                             onClick={increment}
                             className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-cream transition-colors"
+                            aria-label="Increase quantity"
                         >
                             <Plus size={14} className="text-forest" />
                         </button>

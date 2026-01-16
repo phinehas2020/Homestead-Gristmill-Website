@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Settings, Wheat } from 'lucide-react';
 
@@ -61,7 +61,7 @@ const NotFound: React.FC = () => {
                     >
                         <Link
                             to="/"
-                            className="inline-block bg-clay text-cream px-8 py-3 rounded-full font-sans uppercase tracking-widest text-sm hover:bg-gold transition-colors duration-300 mt-4 shadow-lg"
+                            className="inline-block bg-clay text-cream px-8 py-3 rounded-full font-sans uppercase tracking-widest text-sm hover:bg-sage transition-colors duration-300 mt-4 shadow-lg"
                         >
                             Back to the Grind
                         </Link>

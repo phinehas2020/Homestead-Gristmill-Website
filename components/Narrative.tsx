@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { Flame, Droplets, Wheat, Heart, ArrowRight } from 'lucide-react';
 
@@ -15,9 +15,9 @@ const ValueProp: React.FC<{
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
     transition={{ duration: 0.6, delay: index * 0.1 }}
-    className="flex flex-col items-center text-center p-6 md:p-8"
+    className="flex flex-col items-center text-center p-6 md:p-8 rounded-3xl bg-cream/80 soft-card"
   >
-    <div className="w-16 h-16 rounded-full bg-gold/10 flex items-center justify-center mb-6">
+    <div className="w-16 h-16 rounded-full bg-sage/20 border border-sage/30 flex items-center justify-center mb-6">
       {icon}
     </div>
     <h3 className="font-serif text-2xl text-forest mb-3">{title}</h3>
@@ -55,8 +55,8 @@ const Narrative: React.FC = () => {
     <section id="story" className="bg-cream relative py-20 md:py-28 overflow-hidden">
       {/* Decorative Background */}
       <div className="absolute inset-0 opacity-[0.02]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,#D4AF37_0%,transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,#B45E44_0%,transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,#D8B676_0%,transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,#C56B4E_0%,transparent_50%)]" />
       </div>
 
       <div className="container mx-auto px-6 max-w-6xl relative z-10">
@@ -114,7 +114,7 @@ const Narrative: React.FC = () => {
           </div>
           <button
             onClick={() => navigate('/products')}
-            className="group bg-clay hover:bg-gold text-cream px-8 py-4 rounded-full font-sans uppercase tracking-widest text-sm flex items-center gap-3 transition-all duration-300 whitespace-nowrap"
+            className="group bg-clay hover:bg-sage text-cream px-8 py-4 rounded-full font-sans uppercase tracking-widest text-sm flex items-center gap-3 transition-all duration-300 whitespace-nowrap"
           >
             Shop Fresh Flour
             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />

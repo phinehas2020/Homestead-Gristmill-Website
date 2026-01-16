@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
@@ -51,7 +51,9 @@ const Categories: React.FC = () => {
   };
 
   return (
-    <section className="bg-cream py-20 md:py-28 px-6">
+    <section className="bg-cream py-20 md:py-28 px-6 relative overflow-hidden">
+      <div className="pointer-events-none absolute -top-24 right-0 w-80 h-80 bg-sage/15 rounded-full blur-[90px]" />
+      <div className="pointer-events-none absolute -bottom-24 left-10 w-96 h-96 bg-clay/10 rounded-full blur-[110px]" />
       <div className="container mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-12 md:mb-16 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
@@ -85,8 +87,12 @@ const Categories: React.FC = () => {
           </motion.button>
         </div>
 
+        <p className="md:hidden font-sans text-xs uppercase tracking-[0.3em] text-loam/60 mb-4">
+          Swipe to explore
+        </p>
+
         {/* Categories Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-4 -mx-2 px-2 md:mx-0 md:px-0 no-scrollbar">
           {categories.map((category, index) => (
             <motion.div
               key={category.slug}
@@ -95,7 +101,11 @@ const Categories: React.FC = () => {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
               onClick={() => handleCategoryClick(category.slug)}
-              className="group relative aspect-[4/5] rounded-2xl overflow-hidden cursor-pointer"
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCategoryClick(category.slug); } }}
+              role="button"
+              tabIndex={0}
+              className="group relative aspect-[4/5] rounded-3xl overflow-hidden cursor-pointer border border-cream/40 shadow-[0_24px_60px_-45px_rgba(30,24,16,0.65)] min-w-[72%] sm:min-w-[48%] md:min-w-0 snap-start"
+              aria-label={`Shop ${category.name}`}
             >
               {/* Background Image */}
               <div className="absolute inset-0">
@@ -105,7 +115,7 @@ const Categories: React.FC = () => {
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                 />
                 {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/50 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-t from-forest/90 via-forest/50 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
               </div>
 
               {/* Content */}

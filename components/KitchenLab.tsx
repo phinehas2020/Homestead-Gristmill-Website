@@ -1,6 +1,6 @@
 
 import React, { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { GoogleGenAI, Modality } from "@google/genai";
 import { Loader2, Sparkles, Upload, RefreshCw, Wand2 } from 'lucide-react';
 

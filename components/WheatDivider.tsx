@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 const WheatDivider: React.FC<{ className?: string }> = ({ className = "" }) => {
   return (
@@ -17,7 +17,7 @@ const WheatDivider: React.FC<{ className?: string }> = ({ className = "" }) => {
       >
         <path
           d="M2 10C15 10 25 2 40 2C55 2 65 18 80 18C95 18 105 5 120 5C135 5 145 15 160 15C175 15 185 8 198 8"
-          stroke="#D4AF37"
+          stroke="#D8B676"
           strokeWidth="2"
           strokeLinecap="round"
         />

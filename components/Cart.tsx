@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { X } from 'lucide-react';
 import { useShopify } from '../context/ShopifyContext';
 
@@ -28,11 +28,11 @@ const Cart: React.FC<CartProps> = () => {
                         animate={{ x: 0 }}
                         exit={{ x: "100%" }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className="fixed top-0 right-0 h-full w-full md:w-[450px] bg-cream z-50 shadow-2xl p-8 flex flex-col"
+                        className="fixed top-0 right-0 h-full w-full md:w-[450px] bg-cream/95 z-50 shadow-2xl p-8 flex flex-col border-l border-forest/10"
                     >
                         <div className="flex justify-between items-center mb-12">
                             <h2 className="font-serif text-3xl text-forest">Your Sack</h2>
-                            <button onClick={closeCart}>
+                            <button onClick={closeCart} aria-label="Close cart">
                                 <X className="text-loam" />
                             </button>
                         </div>
@@ -45,14 +45,14 @@ const Cart: React.FC<CartProps> = () => {
                             ) : (
                                 cart.lineItems.map((item: any) => (
                                     <div key={item.id} className="flex gap-6 items-center">
-                                        <div className="w-20 h-24 bg-gray-200 rounded-lg overflow-hidden">
+                                        <div className="w-20 h-24 bg-bone rounded-lg overflow-hidden">
                                             {item.variant?.image?.src && (
                                                 <img src={item.variant.image.src} alt={item.title} className="w-full h-full object-cover grayscale opacity-80" />
                                             )}
                                         </div>
                                         <div className="flex-1">
                                             <h4 className="font-serif text-lg text-forest">{item.title}</h4>
-                                            <p className="font-sans text-sm text-loam/60">
+                                            <p className="font-sans text-sm text-loam/60 tabular-nums">
                                                 {item.quantity} x ${parseFloat(item.variant.price.amount).toFixed(2)}
                                             </p>
                                             <button
@@ -67,10 +67,10 @@ const Cart: React.FC<CartProps> = () => {
                             )}
                         </div>
 
-                        <div className="border-t border-loam/10 pt-8 mt-8">
+                        <div className="border-t border-loam/10 pt-8 mt-8 pb-[env(safe-area-inset-bottom)]">
                             <div className="flex justify-between items-center mb-6">
                                 <span className="font-sans text-loam">Subtotal</span>
-                                <span className="font-serif text-2xl text-forest">${parseFloat(subtotal.toString()).toFixed(2)}</span>
+                                <span className="font-serif text-2xl text-forest tabular-nums">${parseFloat(subtotal.toString()).toFixed(2)}</span>
                             </div>
                             <a
                                 href={checkoutUrl || '#'}

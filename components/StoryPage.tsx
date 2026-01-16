@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, MapPin, Clock, Phone, ChevronDown } from 'lucide-react';
 
@@ -17,7 +17,7 @@ const StoryPage: React.FC = () => {
         <div className="bg-cream min-h-screen w-full overflow-hidden">
 
             {/* Hero Section - Full Bleed */}
-            <section className="relative h-screen flex items-center justify-center overflow-hidden">
+            <section className="relative h-dvh flex items-center justify-center overflow-hidden">
                 {/* Background Image with Parallax */}
                 <motion.div
                     style={{ scale: heroScale }}
@@ -51,7 +51,7 @@ const StoryPage: React.FC = () => {
                         initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1, delay: 0.4 }}
-                        className="font-serif text-5xl md:text-8xl lg:text-9xl text-cream leading-[0.9] mb-8"
+                        className="font-serif text-5xl md:text-8xl lg:text-9xl text-cream leading-[0.9] mb-8 text-balance"
                     >
                         A Mill<br />
                         <span className="text-gold">Reborn</span>
@@ -61,7 +61,7 @@ const StoryPage: React.FC = () => {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1, delay: 0.6 }}
-                        className="font-sans text-xl md:text-2xl text-cream/80 max-w-2xl mx-auto leading-relaxed mb-12"
+                        className="font-sans text-xl md:text-2xl text-cream/80 max-w-2xl mx-auto leading-relaxed mb-12 text-pretty"
                     >
                         From the banks of the Musconetcong River to the heart of Texas.
                         A story of timber, stone, and the resilience of honest work.
@@ -75,7 +75,14 @@ const StoryPage: React.FC = () => {
                         className="text-cream/60 hover:text-cream transition-colors flex flex-col items-center gap-2 mx-auto"
                     >
                         <span className="font-sans text-xs uppercase tracking-widest">Discover Our Story</span>
-                        <ChevronDown size={24} className="animate-bounce" />
+                        <motion.span
+                            animate={{ y: [0, 6, 0] }}
+                            transition={{ duration: 1.5, ease: "easeInOut", repeat: Infinity }}
+                            whileInView={{ y: [0, 6, 0] }}
+                            viewport={{ once: false, amount: 0.5 }}
+                        >
+                            <ChevronDown size={24} />
+                        </motion.span>
                     </motion.button>
                 </motion.div>
             </section>
@@ -163,9 +170,21 @@ const StoryPage: React.FC = () => {
                             className="relative order-2 lg:order-1"
                         >
                             <div className="relative aspect-square max-w-md mx-auto">
-                                {/* Spinning rings */}
-                                <div className="absolute inset-0 border border-gold/20 rounded-full animate-[spin_60s_linear_infinite]" />
-                                <div className="absolute inset-8 border border-gold/30 rounded-full animate-[spin_40s_linear_infinite_reverse]" />
+                                {/* Spinning rings - viewport controlled */}
+                                <motion.div
+                                    className="absolute inset-0 border border-gold/20 rounded-full"
+                                    animate={{ rotate: 360 }}
+                                    transition={{ duration: 60, ease: "linear", repeat: Infinity }}
+                                    whileInView={{ rotate: 360 }}
+                                    viewport={{ once: false, amount: 0.3 }}
+                                />
+                                <motion.div
+                                    className="absolute inset-8 border border-gold/30 rounded-full"
+                                    animate={{ rotate: -360 }}
+                                    transition={{ duration: 40, ease: "linear", repeat: Infinity }}
+                                    whileInView={{ rotate: -360 }}
+                                    viewport={{ once: false, amount: 0.3 }}
+                                />
 
                                 <div className="absolute inset-16 rounded-full overflow-hidden shadow-2xl">
                                     <img
@@ -237,7 +256,7 @@ const StoryPage: React.FC = () => {
 
                         <button
                             onClick={() => navigate('/products')}
-                            className="group inline-flex items-center gap-3 bg-clay hover:bg-forest text-cream px-6 py-3 rounded-full font-sans uppercase tracking-widest text-sm transition-colors mt-4"
+                            className="group inline-flex items-center gap-3 bg-clay hover:bg-sage text-cream px-6 py-3 rounded-full font-sans uppercase tracking-widest text-sm transition-colors mt-4"
                         >
                             Taste the Revival
                             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -428,10 +447,10 @@ const StoryPage: React.FC = () => {
                         </p>
 
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                            <button
-                                onClick={() => navigate('/products')}
-                                className="group bg-clay hover:bg-gold text-cream px-10 py-5 rounded-full font-sans uppercase tracking-widest text-sm flex items-center gap-3 transition-all duration-300"
-                            >
+                        <button
+                            onClick={() => navigate('/products')}
+                            className="group bg-clay hover:bg-sage text-cream px-10 py-5 rounded-full font-sans uppercase tracking-widest text-sm flex items-center gap-3 transition-all duration-300"
+                        >
                                 Shop Our Flour
                                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                             </button>

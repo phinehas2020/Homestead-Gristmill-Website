@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Mail, Star } from 'lucide-react';
 
@@ -38,6 +38,10 @@ const Manifesto: React.FC = () => {
     <section className="relative bg-forest overflow-hidden">
       {/* Subtle Texture */}
       <div className="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E')]" />
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-24 left-10 w-72 h-72 bg-sage/20 rounded-full blur-[140px]" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-clay/20 rounded-full blur-[160px]" />
+      </div>
 
       {/* Testimonials Section */}
       <div className="relative z-10 py-16 md:py-24 border-b border-cream/10">
@@ -113,10 +117,11 @@ const Manifesto: React.FC = () => {
                   placeholder="Your email address"
                   required
                   className="flex-1 bg-cream/10 border border-cream/20 rounded-full px-6 py-4 font-sans text-cream placeholder:text-cream/40 focus:outline-none focus:border-gold transition-colors"
+                  aria-label="Email address for newsletter signup"
                 />
                 <button
                   type="submit"
-                  className="bg-clay hover:bg-gold text-cream px-8 py-4 rounded-full font-sans uppercase tracking-widest text-sm transition-colors duration-300 whitespace-nowrap"
+                  className="bg-clay hover:bg-sage text-cream px-8 py-4 rounded-full font-sans uppercase tracking-widest text-sm transition-colors duration-300 whitespace-nowrap"
                 >
                   Subscribe
                 </button>
@@ -148,7 +153,7 @@ const Manifesto: React.FC = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button
                 onClick={() => navigate('/products')}
-                className="group bg-clay hover:bg-gold text-cream px-10 py-5 rounded-full font-sans uppercase tracking-widest text-sm flex items-center gap-3 transition-all duration-300"
+                className="group bg-clay hover:bg-sage text-cream px-10 py-5 rounded-full font-sans uppercase tracking-widest text-sm flex items-center gap-3 transition-all duration-300"
               >
                 Shop All Flour
                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { Product } from '../types';
 import { ShoppingBag, Plus, Minus, ArrowRight, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -42,12 +42,16 @@ const ProductCard: React.FC<{
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: index * 0.1 }}
-      className="group relative flex flex-col bg-cream rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500"
+      className="group relative flex flex-col h-full bg-cream/90 rounded-3xl overflow-hidden soft-card transition-all duration-500 hover:-translate-y-1"
     >
       {/* Image Container */}
       <div
         onClick={handleProductClick}
-        className="relative w-full aspect-square overflow-hidden bg-bone cursor-pointer"
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleProductClick(); } }}
+        role="button"
+        tabIndex={0}
+        className="relative w-full aspect-square overflow-hidden bg-cream/70 cursor-pointer"
+        aria-label={`View ${product.name} details`}
       >
         {/* Category Badge */}
         <div className="absolute top-4 left-4 z-20">
@@ -71,7 +75,7 @@ const ProductCard: React.FC<{
         <div
           className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"
         >
-          <span className="bg-cream/95 text-forest px-5 py-2.5 rounded-full font-sans text-xs uppercase tracking-widest shadow-lg">
+          <span className="bg-cream/95 text-forest px-5 py-2.5 rounded-full font-sans text-xs uppercase tracking-widest shadow-lg border border-forest/10">
             View Details
           </span>
         </div>
@@ -79,12 +83,14 @@ const ProductCard: React.FC<{
 
       {/* Product Info */}
       <div className="p-6 flex flex-col flex-grow">
-        <div className="flex-grow">
-          <h3
-            onClick={handleProductClick}
-            className="font-serif text-2xl md:text-3xl text-forest mb-2 cursor-pointer hover:text-clay transition-colors leading-tight"
-          >
-            {product.name}
+        <div className="flex-grow min-h-[4.75rem] md:min-h-[5.75rem]">
+          <h3 className="font-serif text-2xl md:text-3xl text-forest mb-2 leading-tight line-clamp-2 min-h-[3.2rem] md:min-h-[4rem]">
+            <button
+              onClick={handleProductClick}
+              className="text-left hover:text-clay transition-colors cursor-pointer"
+            >
+              {product.name}
+            </button>
           </h3>
           <p className="font-sans text-loam/60 text-sm mb-4">{product.weight}</p>
         </div>
@@ -92,21 +98,23 @@ const ProductCard: React.FC<{
         {/* Price & Add to Cart */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <p className="font-serif text-2xl text-clay">${product.price.toFixed(2)}</p>
+            <p className="font-serif text-2xl text-clay tabular-nums">${product.price.toFixed(2)}</p>
 
             {/* Quantity Selector */}
-            <div className="flex items-center gap-1 bg-bone rounded-full p-1">
+            <div className="flex items-center gap-1 bg-cream/80 border border-forest/10 rounded-full p-1">
               <button
                 onClick={(e) => { e.stopPropagation(); setQuantity(Math.max(1, quantity - 1)); }}
                 className="w-10 h-10 md:w-8 md:h-8 flex items-center justify-center rounded-full hover:bg-cream transition-colors"
                 disabled={quantity <= 1}
+                aria-label="Decrease quantity"
               >
                 <Minus size={16} className={quantity <= 1 ? 'text-loam/30' : 'text-forest'} />
               </button>
-              <span className="w-10 md:w-8 text-center font-sans text-sm text-forest">{quantity}</span>
+              <span className="w-10 md:w-8 text-center font-sans text-sm text-forest" aria-live="polite">{quantity}</span>
               <button
                 onClick={(e) => { e.stopPropagation(); setQuantity(quantity + 1); }}
                 className="w-10 h-10 md:w-8 md:h-8 flex items-center justify-center rounded-full hover:bg-cream transition-colors"
+                aria-label="Increase quantity"
               >
                 <Plus size={16} className="text-forest" />
               </button>
@@ -147,7 +155,9 @@ const Shop: React.FC<ShopProps> = ({ products, addToCart }) => {
   const navigate = useNavigate();
 
   return (
-    <section className="bg-bone py-24 md:py-32 px-6" id="shop">
+    <section className="bg-bone py-24 md:py-32 px-6 relative overflow-hidden" id="shop">
+      <div className="pointer-events-none absolute -top-24 left-10 w-72 h-72 bg-sage/15 rounded-full blur-[90px]" />
+      <div className="pointer-events-none absolute bottom-0 right-0 w-96 h-96 bg-clay/10 rounded-full blur-[110px]" />
       <div className="container mx-auto max-w-7xl">
 
         {/* Header */}
@@ -182,15 +192,20 @@ const Shop: React.FC<ShopProps> = ({ products, addToCart }) => {
           </motion.button>
         </div>
 
+        <p className="md:hidden font-sans text-xs uppercase tracking-[0.3em] text-loam/60 mb-4">
+          Swipe to browse
+        </p>
+
         {/* Product Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="flex items-stretch md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-6 md:pb-0 -mx-2 px-2 md:mx-0 md:px-0 no-scrollbar">
           {products.map((product, index) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              addToCart={addToCart}
-              index={index}
-            />
+            <div key={product.id} className="min-w-[80%] sm:min-w-[60%] md:min-w-0 snap-start h-full">
+              <ProductCard
+                product={product}
+                addToCart={addToCart}
+                index={index}
+              />
+            </div>
           ))}
         </div>
 
@@ -206,7 +221,7 @@ const Shop: React.FC<ShopProps> = ({ products, addToCart }) => {
           </p>
           <button
             onClick={() => navigate('/products')}
-            className="bg-clay hover:bg-forest text-cream px-10 py-4 rounded-full font-sans uppercase tracking-widest text-sm transition-colors duration-300"
+            className="bg-clay hover:bg-sage text-cream px-10 py-4 rounded-full font-sans uppercase tracking-widest text-sm transition-colors duration-300"
           >
             Browse Full Collection
           </button>

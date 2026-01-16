@@ -1,10 +1,11 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import Hero from './Hero';
 import Shop from './Shop';
 import Categories from './Categories';
 import Narrative from './Narrative';
 import Manifesto from './Manifesto';
+import MobileQuickAdd from './MobileQuickAdd';
 import { Product } from '../types';
 
 interface HomeProps {
@@ -22,6 +23,9 @@ const Home: React.FC<HomeProps> = ({ products, addToCart }) => {
         >
             {/* 1. Hero with CTAs and Trust Bar */}
             <Hero />
+
+            {/* Mobile-only: Quick add bestsellers for faster shopping */}
+            <MobileQuickAdd products={products} addToCart={addToCart} />
 
             {/* 2. Featured Products - Immediate commerce opportunity */}
             <Shop

@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import WheatDivider from './WheatDivider';
 
 const VisitPage: React.FC = () => {
@@ -82,7 +82,7 @@ const VisitPage: React.FC = () => {
                         whileInView={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 1 }}
                         viewport={{ once: true }}
-                        className="h-[500px] bg-bone rounded-2xl overflow-hidden relative"
+                        className="h-[500px] bg-cream/80 rounded-3xl overflow-hidden relative soft-card"
                     >
                         {/* Map Placeholder - In a real app, embed Google Maps iframe here */}
                         <iframe
