@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { Product } from '../types';
 import { ShoppingBag, Search, X, Plus, Minus, Check, SlidersHorizontal } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -72,8 +72,8 @@ const ProductCard: React.FC<{
         <div className="absolute top-3 left-3 z-20">
           <span className="bg-forest/90 text-cream px-2.5 py-1 rounded-full font-sans text-[9px] uppercase tracking-widest backdrop-blur-sm">
             {product.category === 'wheat' ? 'Wheat' :
-             product.category === 'corn' ? 'Corn' :
-             product.category === 'rye' ? 'Rye' : 'Goods'}
+              product.category === 'corn' ? 'Corn' :
+                product.category === 'rye' ? 'Rye' : 'Goods'}
           </span>
         </div>
 
@@ -134,11 +134,10 @@ const ProductCard: React.FC<{
         <button
           onClick={handleAddToCart}
           disabled={isAdding || justAdded}
-          className={`w-full py-3.5 md:py-3 rounded-full font-sans uppercase tracking-widest text-[10px] md:text-xs flex items-center justify-center gap-2 transition-all duration-300 ${
-            justAdded
+          className={`w-full py-3.5 md:py-3 rounded-full font-sans uppercase tracking-widest text-[10px] md:text-xs flex items-center justify-center gap-2 transition-all duration-300 ${justAdded
               ? 'bg-green-600 text-cream'
               : 'bg-forest text-cream hover:bg-clay'
-          }`}
+            }`}
         >
           {justAdded ? (
             <>
@@ -274,11 +273,10 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart }) => {
                 <button
                   key={cat.id}
                   onClick={() => handleCategoryChange(cat.id)}
-                  className={`px-4 py-2.5 rounded-full font-sans text-sm transition-all duration-300 flex items-center gap-2 border ${
-                    activeCategory === cat.id
+                  className={`px-4 py-2.5 rounded-full font-sans text-sm transition-all duration-300 flex items-center gap-2 border ${activeCategory === cat.id
                       ? 'bg-forest text-cream border-forest'
                       : 'bg-cream/90 text-forest border-forest/10 hover:bg-forest/10'
-                  }`}
+                    }`}
                 >
                   {cat.label}
                   <span className={`text-xs ${activeCategory === cat.id ? 'text-cream/70' : 'text-loam/50'}`}>
@@ -355,11 +353,10 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products, addToCart }) => {
                         handleCategoryChange(cat.id);
                         setShowFilters(false);
                       }}
-                      className={`px-4 py-2.5 rounded-full font-sans text-xs transition-all duration-300 border ${
-                        activeCategory === cat.id
+                      className={`px-4 py-2.5 rounded-full font-sans text-xs transition-all duration-300 border ${activeCategory === cat.id
                           ? 'bg-forest text-cream border-forest'
                           : 'bg-cream text-forest border-forest/10'
-                      }`}
+                        }`}
                     >
                       {cat.label} ({categoryCounts[cat.id]})
                     </button>

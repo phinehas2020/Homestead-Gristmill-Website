@@ -1,6 +1,6 @@
 
 import React, { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { GoogleGenAI, Modality } from "@google/genai";
 import { Loader2, Sparkles, Upload, RefreshCw, Wand2 } from 'lucide-react';
 
@@ -158,8 +158,8 @@ const KitchenLab: React.FC<KitchenLabProps> = () => {
                                 disabled={isLoading || !image || !prompt}
 
                                 className={`px-8 rounded-xl font-sans font-medium tracking-wide flex items-center justify-center gap-2 transition-all min-w-[140px] ${isLoading || !image || !prompt
-                                        ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                                        : 'bg-forest text-cream hover:bg-loam shadow-lg hover:shadow-xl'
+                                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                    : 'bg-forest text-cream hover:bg-loam shadow-lg hover:shadow-xl'
                                     }`}
                             >
                                 {isLoading ? <Loader2 className="animate-spin" /> : <Wand2 size={18} />}

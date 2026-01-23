@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, MapPin, Clock, Phone, ChevronDown } from 'lucide-react';
 
@@ -447,10 +447,10 @@ const StoryPage: React.FC = () => {
                         </p>
 
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <button
-                            onClick={() => navigate('/products')}
-                            className="group bg-clay hover:bg-sage text-cream px-10 py-5 rounded-full font-sans uppercase tracking-widest text-sm flex items-center gap-3 transition-all duration-300"
-                        >
+                            <button
+                                onClick={() => navigate('/products')}
+                                className="group bg-clay hover:bg-sage text-cream px-10 py-5 rounded-full font-sans uppercase tracking-widest text-sm flex items-center gap-3 transition-all duration-300"
+                            >
                                 Shop Our Flour
                                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                             </button>

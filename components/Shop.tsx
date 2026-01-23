@@ -1,9 +1,9 @@
-
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { Product } from '../types';
 import { ShoppingBag, Plus, Minus, ArrowRight, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { cn } from '../lib/cn';
 
 interface ShopProps {
   products: Product[];
@@ -41,8 +41,8 @@ const ProductCard: React.FC<{
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: index * 0.1 }}
-      className="group relative flex flex-col h-full bg-cream/90 rounded-3xl overflow-hidden soft-card transition-all duration-500 hover:-translate-y-1"
+      transition={{ duration: 0.5, ease: "easeOut", delay: index * 0.05 }}
+      className="group relative flex flex-col h-full bg-cream/90 rounded-3xl overflow-hidden soft-card transition-transform duration-200 hover:-translate-y-1"
     >
       {/* Image Container */}
       <div
@@ -54,26 +54,26 @@ const ProductCard: React.FC<{
         aria-label={`View ${product.name} details`}
       >
         {/* Category Badge */}
-        <div className="absolute top-4 left-4 z-20">
-          <span className="bg-forest/90 text-cream px-3 py-1.5 rounded-full font-sans text-[10px] uppercase tracking-widest backdrop-blur-sm">
+        <div className="absolute top-4 left-4 z-[var(--z-dropdown)]">
+          <span className="bg-forest/90 text-cream px-3 py-1.5 rounded-full font-sans text-[10px] uppercase tracking-widest">
             {product.category === 'wheat' ? 'Heritage Wheat' :
-             product.category === 'corn' ? 'Stone-Ground Corn' :
-             product.category === 'rye' ? 'Heritage Rye' : 'Dry Goods'}
+              product.category === 'corn' ? 'Stone-Ground Corn' :
+                product.category === 'rye' ? 'Heritage Rye' : 'Dry Goods'}
           </span>
         </div>
 
         {/* Hover Overlay */}
-        <div className="absolute inset-0 bg-forest/0 group-hover:bg-forest/10 transition-colors duration-500 z-10" />
+        <div className="absolute inset-0 bg-forest/0 group-hover:bg-forest/10 transition-colors duration-200 z-[var(--z-above)]" />
 
         <img
           src={product.image}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200 ease-out"
         />
 
         {/* Quick View on Hover */}
         <div
-          className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"
+          className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-[var(--z-dropdown)]"
         >
           <span className="bg-cream/95 text-forest px-5 py-2.5 rounded-full font-sans text-xs uppercase tracking-widest shadow-lg border border-forest/10">
             View Details
@@ -87,7 +87,7 @@ const ProductCard: React.FC<{
           <h3 className="font-serif text-2xl md:text-3xl text-forest mb-2 leading-tight line-clamp-2 min-h-[3.2rem] md:min-h-[4rem]">
             <button
               onClick={handleProductClick}
-              className="text-left hover:text-clay transition-colors cursor-pointer"
+              className="text-left hover:text-clay transition-colors duration-200 cursor-pointer"
             >
               {product.name}
             </button>
@@ -104,16 +104,19 @@ const ProductCard: React.FC<{
             <div className="flex items-center gap-1 bg-cream/80 border border-forest/10 rounded-full p-1">
               <button
                 onClick={(e) => { e.stopPropagation(); setQuantity(Math.max(1, quantity - 1)); }}
-                className="w-10 h-10 md:w-8 md:h-8 flex items-center justify-center rounded-full hover:bg-cream transition-colors"
+                className={cn(
+                  "size-10 md:size-8 flex items-center justify-center rounded-full hover:bg-cream transition-colors duration-200",
+                  quantity <= 1 && "opacity-50"
+                )}
                 disabled={quantity <= 1}
                 aria-label="Decrease quantity"
               >
                 <Minus size={16} className={quantity <= 1 ? 'text-loam/30' : 'text-forest'} />
               </button>
-              <span className="w-10 md:w-8 text-center font-sans text-sm text-forest" aria-live="polite">{quantity}</span>
+              <span className="w-10 md:w-8 text-center font-sans text-sm text-forest tabular-nums" aria-live="polite">{quantity}</span>
               <button
                 onClick={(e) => { e.stopPropagation(); setQuantity(quantity + 1); }}
-                className="w-10 h-10 md:w-8 md:h-8 flex items-center justify-center rounded-full hover:bg-cream transition-colors"
+                className="size-10 md:size-8 flex items-center justify-center rounded-full hover:bg-cream transition-colors duration-200"
                 aria-label="Increase quantity"
               >
                 <Plus size={16} className="text-forest" />
@@ -125,11 +128,10 @@ const ProductCard: React.FC<{
           <button
             onClick={handleAddToCart}
             disabled={isAdding || justAdded}
-            className={`w-full py-4 rounded-full font-sans uppercase tracking-widest text-sm flex items-center justify-center gap-2 transition-all duration-300 ${
-              justAdded
-                ? 'bg-green-600 text-cream'
-                : 'bg-forest text-cream hover:bg-clay'
-            }`}
+            className={cn(
+              "w-full py-4 rounded-full font-sans uppercase tracking-widest text-sm flex items-center justify-center gap-2 transition-colors duration-200",
+              justAdded ? 'bg-green-600 text-cream' : 'bg-forest text-cream hover:bg-clay'
+            )}
           >
             {justAdded ? (
               <>
@@ -137,7 +139,7 @@ const ProductCard: React.FC<{
                 Added to Sack
               </>
             ) : isAdding ? (
-              <span className="animate-pulse">Adding...</span>
+              <span className="animate-pulse">Adding…</span>
             ) : (
               <>
                 <ShoppingBag size={18} />
@@ -156,8 +158,8 @@ const Shop: React.FC<ShopProps> = ({ products, addToCart }) => {
 
   return (
     <section className="bg-bone py-24 md:py-32 px-6 relative overflow-hidden" id="shop">
-      <div className="pointer-events-none absolute -top-24 left-10 w-72 h-72 bg-sage/15 rounded-full blur-[90px]" />
-      <div className="pointer-events-none absolute bottom-0 right-0 w-96 h-96 bg-clay/10 rounded-full blur-[110px]" />
+      <div className="pointer-events-none absolute -top-24 left-10 w-72 h-72 bg-sage/15 rounded-full blur-[90px]" aria-hidden="true" />
+      <div className="pointer-events-none absolute bottom-0 right-0 w-96 h-96 bg-clay/10 rounded-full blur-[110px]" aria-hidden="true" />
       <div className="container mx-auto max-w-7xl">
 
         {/* Header */}
@@ -167,6 +169,7 @@ const Shop: React.FC<ShopProps> = ({ products, addToCart }) => {
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
               className="text-clay font-sans uppercase tracking-[0.2em] text-xs mb-4 block"
             >
               Bestsellers
@@ -175,7 +178,8 @@ const Shop: React.FC<ShopProps> = ({ products, addToCart }) => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="font-serif text-5xl md:text-7xl text-forest"
+              transition={{ duration: 0.5, delay: 0.05, ease: "easeOut" }}
+              className="font-serif text-5xl md:text-7xl text-forest text-balance"
             >
               The Pantry
             </motion.h2>
@@ -184,11 +188,12 @@ const Shop: React.FC<ShopProps> = ({ products, addToCart }) => {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
             onClick={() => navigate('/products')}
-            className="group flex items-center gap-2 text-forest hover:text-clay transition-colors font-sans uppercase tracking-widest text-sm"
+            className="group flex items-center gap-2 text-forest hover:text-clay transition-colors duration-200 font-sans uppercase tracking-widest text-sm"
           >
             View All Products
-            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform duration-200" />
           </motion.button>
         </div>
 
@@ -214,14 +219,15 @@ const Shop: React.FC<ShopProps> = ({ products, addToCart }) => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
           className="mt-16 md:mt-20 text-center"
         >
-          <p className="font-sans text-loam/70 text-lg mb-6">
+          <p className="font-sans text-loam/70 text-lg mb-6 text-pretty">
             Looking for something specific? We have over 20 varieties of heritage flour.
           </p>
           <button
             onClick={() => navigate('/products')}
-            className="bg-clay hover:bg-sage text-cream px-10 py-4 rounded-full font-sans uppercase tracking-widest text-sm transition-colors duration-300"
+            className="bg-clay hover:bg-sage text-cream px-10 py-4 rounded-full font-sans uppercase tracking-widest text-sm transition-colors duration-200"
           >
             Browse Full Collection
           </button>

@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { ShoppingBag, Menu, X, User } from 'lucide-react';
 import { Product } from './types';
 import { ShopifyProvider, useShopify } from './context/ShopifyContext';
@@ -261,27 +261,26 @@ function AppContent() {
 
 
   return (
-    <main className="bg-forest min-h-screen w-full overflow-hidden relative">
+    <main className="bg-forest min-h-dvh w-full overflow-hidden relative">
 
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full z-40 px-4 py-4 md:px-6 md:py-5 pt-[max(1rem,env(safe-area-inset-top))] flex justify-between items-center bg-cream/85 text-forest backdrop-blur-xl border-b border-forest/10 shadow-[0_10px_40px_-30px_rgba(32,24,16,0.6)] transition-colors duration-500">
+      <nav className="fixed top-0 left-0 w-full z-[var(--z-overlay)] px-4 py-4 md:px-6 md:py-5 pt-[max(1rem,env(safe-area-inset-top))] flex justify-between items-center bg-cream/90 text-forest border-b border-forest/10 shadow-[0_10px_40px_-30px_rgba(32,24,16,0.6)] transition-colors duration-200">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 1 }}
-          className="font-serif font-bold text-xl tracking-tighter cursor-pointer z-50"
-
+          transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
+          className="font-serif font-bold text-xl tracking-tighter cursor-pointer z-[var(--z-modal)]"
           onClick={goHome}
         >
           <img src="/logo.png" alt="Homestead Gristmill Logo" className="h-12 w-auto" />
         </motion.div>
 
-        <div className="flex items-center gap-8 z-50">
+        <div className="flex items-center gap-8 z-[var(--z-modal)]">
           <motion.button
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.1 }}
+            transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
             onClick={openCart}
             className="relative group"
             aria-label="Open cart"
@@ -301,7 +300,7 @@ function AppContent() {
           <motion.a
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.15 }}
+            transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
             href="https://homesteadgristmill.com/account"
             target="_blank"
             rel="noopener noreferrer"
@@ -314,7 +313,7 @@ function AppContent() {
           <motion.button
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.2 }}
+            transition={{ duration: 0.4, delay: 0.25, ease: "easeOut" }}
             onClick={toggleMenu}
             aria-label="Open menu"
           >
@@ -366,14 +365,14 @@ function AppContent() {
       </AnimatePresence>
 
       {/* Footer */}
-      <footer className="bg-forest text-cream py-24 px-6 border-t border-cream/10 relative z-10">
+      <footer className="bg-forest text-cream py-24 px-6 border-t border-cream/10 relative z-[var(--z-above)]">
         <div className="container mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-3 gap-12">
           <div>
             <button className="font-serif text-3xl mb-6 cursor-pointer text-left" onClick={goHome}>
               <span className="block">Homestead</span>
               <span className="block">Gristmill</span>
             </button>
-            <p className="font-sans text-cream/60 text-sm max-w-xs">
+            <p className="font-sans text-cream/60 text-sm max-w-xs text-pretty">
               Restoring the honest table, one stone-ground bag at a time.
             </p>
           </div>
@@ -427,7 +426,7 @@ function AppContent() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-forest z-50 flex items-center justify-center"
+            className="fixed inset-0 bg-forest z-[var(--z-modal)] flex items-center justify-center"
           >
             <button
               onClick={closeMenu}
@@ -441,8 +440,9 @@ function AppContent() {
                 <motion.button
                   key={item.name}
                   initial={{ y: 40, opacity: 0 }}
-                  whileInView={{ y: 0, opacity: 1 }}
-                  className="block w-full font-serif text-5xl md:text-7xl text-cream hover:text-gold transition-colors duration-500 cursor-pointer pointer-events-auto"
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="block w-full font-serif text-5xl md:text-7xl text-cream hover:text-gold transition-colors duration-200 cursor-pointer pointer-events-auto"
                   onClick={() => handleNavClick(item)}
                 >
                   {item.name}

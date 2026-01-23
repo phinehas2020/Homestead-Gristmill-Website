@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { Product } from '../types';
 import { ShoppingBag, ArrowLeft, Wheat, Minus, Plus, Check, Truck, Clock, Leaf, ChevronRight } from 'lucide-react';
 
@@ -148,11 +148,10 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
                                     <button
                                         key={variant.id}
                                         onClick={() => setActiveVariant(variant)}
-                                        className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                                            activeVariant?.id === variant.id
+                                        className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${activeVariant?.id === variant.id
                                                 ? 'border-forest'
                                                 : 'border-transparent opacity-60 hover:opacity-100'
-                                        }`}
+                                            }`}
                                         aria-label={`Select ${variant.title} variant`}
                                         aria-pressed={activeVariant?.id === variant.id}
                                     >
@@ -213,11 +212,10 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
                                         <button
                                             key={variant.id}
                                             onClick={() => setActiveVariant(variant)}
-                                            className={`px-5 py-3 rounded-full border-2 transition-all duration-300 font-sans text-sm ${
-                                                activeVariant?.id === variant.id
+                                            className={`px-5 py-3 rounded-full border-2 transition-all duration-300 font-sans text-sm ${activeVariant?.id === variant.id
                                                     ? 'bg-forest text-cream border-forest'
                                                     : 'bg-transparent text-forest border-forest/20 hover:border-forest'
-                                            }`}
+                                                }`}
                                         >
                                             {variant.title} — ${variant.price.toFixed(2)}
                                         </button>
@@ -229,12 +227,12 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
                         {/* Quantity & Add to Cart */}
                         <div className="flex flex-col sm:flex-row gap-4 mb-8">
                             {/* Quantity Selector */}
-                        <div className="flex items-center bg-cream/90 border border-forest/10 rounded-full px-4 py-3">
-                            <button
-                                onClick={decrement}
-                                className="w-10 h-10 flex items-center justify-center text-forest/50 hover:text-forest transition-colors"
-                                disabled={quantity <= 1}
-                                aria-label="Decrease quantity"
+                            <div className="flex items-center bg-cream/90 border border-forest/10 rounded-full px-4 py-3">
+                                <button
+                                    onClick={decrement}
+                                    className="w-10 h-10 flex items-center justify-center text-forest/50 hover:text-forest transition-colors"
+                                    disabled={quantity <= 1}
+                                    aria-label="Decrease quantity"
                                 >
                                     <Minus size={18} />
                                 </button>
@@ -254,11 +252,10 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
                             <button
                                 onClick={handleAddToCart}
                                 disabled={isAdding || justAdded}
-                                className={`flex-1 py-4 px-8 rounded-full font-sans uppercase tracking-widest text-sm font-medium flex items-center justify-center gap-3 transition-all duration-300 ${
-                                    justAdded
+                                className={`flex-1 py-4 px-8 rounded-full font-sans uppercase tracking-widest text-sm font-medium flex items-center justify-center gap-3 transition-all duration-300 ${justAdded
                                         ? 'bg-green-600 text-cream'
                                         : 'bg-forest text-cream hover:bg-clay'
-                                }`}
+                                    }`}
                             >
                                 {justAdded ? (
                                     <>
@@ -404,11 +401,10 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
                     <button
                         onClick={handleAddToCart}
                         disabled={isAdding || justAdded}
-                        className={`px-6 py-3.5 rounded-full font-sans uppercase tracking-widest text-xs flex items-center gap-2 transition-all whitespace-nowrap ${
-                            justAdded
+                        className={`px-6 py-3.5 rounded-full font-sans uppercase tracking-widest text-xs flex items-center gap-2 transition-all whitespace-nowrap ${justAdded
                                 ? 'bg-green-600 text-cream'
                                 : 'bg-forest text-cream hover:bg-clay'
-                        }`}
+                            }`}
                     >
                         {justAdded ? (
                             <>
